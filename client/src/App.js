@@ -3,6 +3,7 @@ import {
   Burger,
   ColorSchemeProvider,
   Header,
+  Image,
   MantineProvider,
   MediaQuery,
   Navbar,
@@ -14,6 +15,8 @@ import { useEffect, useState } from "react";
 import IconChangeTheme from "./components/iconChangeTheme";
 import MainContent from "./components/mainContent";
 import NavBarLink from "./components/navbarLink";
+
+import Logo from "./image/logo.png";
 
 import { BrowserRouter as Router } from "react-router-dom";
 
@@ -78,6 +81,12 @@ function App() {
                         mr="xl"
                       />
                     </MediaQuery>
+                    <Image
+                      width={65}
+                      radius="md"
+                      src={Logo}
+                      alt="Random unsplash image"
+                    />
                     <Text
                       size="lg"
                       weight={500}
