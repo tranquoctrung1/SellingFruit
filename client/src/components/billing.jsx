@@ -1,4 +1,5 @@
-import { Button, Col, Grid } from "@mantine/core";
+import { Button, Center, Grid, ThemeIcon } from "@mantine/core";
+import { IconPrinter } from "@tabler/icons";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { BillingToPrint } from "./billToPrint";
@@ -60,20 +61,23 @@ const Billing = () => {
   return (
     <div>
       {loading && <p className="indicator">onBeforeGetContent: Loading...</p>}
-      <Grid>
-        <Grid.Col span={4}>
-          <Button variant="filled" color={"violet"} onClick={handlePrint}>
-            In hóa đơn bán lẻ
-          </Button>
-        </Grid.Col>
-      </Grid>
 
       <BillingToPrint ref={componentRef} />
-      <BillingToPrint ref={componentRef} />
-      <BillingToPrint ref={componentRef} />
-      <BillingToPrint ref={componentRef} />
-      <BillingToPrint ref={componentRef} />
-      <BillingToPrint ref={componentRef} />
+
+      <Grid>
+        <Grid.Col span={12}>
+          <Center>
+            <Button
+              variant="filled"
+              color={"violet"}
+              onClick={handlePrint}
+              leftIcon={<IconPrinter size={14} />}
+            >
+              In hóa đơn bán lẻ
+            </Button>
+          </Center>
+        </Grid.Col>
+      </Grid>
     </div>
   );
 };
