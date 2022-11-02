@@ -12,6 +12,10 @@ import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 
 import IconChangeTheme from "./components/iconChangeTheme";
+import MainContent from "./components/mainContent";
+import NavBarLink from "./components/navbarLink";
+
+import { BrowserRouter as Router } from "react-router-dom";
 
 function App() {
   const [colorScheme, setColorScheme] = useLocalStorage({
@@ -42,51 +46,62 @@ function App() {
         withNormalizeCSS
       >
         <div className="main">
-          <AppShell
-            padding="md"
-            navbarOffsetBreakpoint="sm"
-            navbar={
-              <Navbar
-                hiddenBreakpoint="sm"
-                hidden={!opened}
-                width={{ sm: 200, lg: 300 }}
-                p="xs"
-              ></Navbar>
-            }
-            header={
-              <Header height={60} p="xs">
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    height: "100%",
-                  }}
+          <Router>
+            <AppShell
+              padding="md"
+              navbarOffsetBreakpoint="sm"
+              navbar={
+                <Navbar
+                  hiddenBreakpoint="sm"
+                  hidden={!opened}
+                  width={{ sm: 200, lg: 250 }}
+                  p="xs"
                 >
-                  <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-                    <Burger
-                      opened={opened}
-                      onClick={() => setOpened((o) => !o)}
-                      size="sm"
-                      mr="xl"
-                    />
-                  </MediaQuery>
-                  <Text>Application header</Text>
-                  <IconChangeTheme />
-                </div>
-              </Header>
-            }
-            styles={(theme) => ({
-              main: {
-                backgroundColor:
-                  theme.colorScheme === "dark"
-                    ? theme.colors.dark[8]
-                    : theme.colors.gray[0],
-              },
-            })}
-          >
-            {/* Your application here */}
-          </AppShell>
+                  <NavBarLink />
+                </Navbar>
+              }
+              header={
+                <Header height={60} p="xs">
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      height: "100%",
+                    }}
+                  >
+                    <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+                      <Burger
+                        opened={opened}
+                        onClick={() => setOpened((o) => !o)}
+                        size="sm"
+                        mr="xl"
+                      />
+                    </MediaQuery>
+                    <Text
+                      size="lg"
+                      weight={500}
+                      variant="gradient"
+                      gradient={{ from: "red", to: "yellow", deg: 45 }}
+                    >
+                      Nhật Nam Food
+                    </Text>
+                    <IconChangeTheme />
+                  </div>
+                </Header>
+              }
+              styles={(theme) => ({
+                main: {
+                  backgroundColor:
+                    theme.colorScheme === "dark"
+                      ? theme.colors.dark[8]
+                      : theme.colors.gray[0],
+                },
+              })}
+            >
+              <MainContent />
+            </AppShell>
+          </Router>
         </div>
       </MantineProvider>
     </ColorSchemeProvider>
