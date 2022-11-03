@@ -92,8 +92,9 @@ function App() {
                       weight={500}
                       variant="gradient"
                       gradient={{ from: "red", to: "yellow", deg: 45 }}
+                      transform="uppercase"
                     >
-                      Nhật Nam Food
+                      Nhất Nam Food
                     </Text>
                     <IconChangeTheme />
                   </div>

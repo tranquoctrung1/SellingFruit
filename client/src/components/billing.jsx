@@ -1,8 +1,10 @@
-import { Button, Center, Grid, ThemeIcon } from "@mantine/core";
+import { Button, Center, Grid, Space } from "@mantine/core";
 import { IconPrinter } from "@tabler/icons";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { BillingToPrint } from "./billToPrint";
+
+import { motion } from "framer-motion";
 
 const Billing = () => {
   const componentRef = useRef(null);
@@ -59,26 +61,40 @@ const Billing = () => {
   }, [onBeforeGetContentResolve.current, text]);
 
   return (
-    <div>
-      {loading && <p className="indicator">onBeforeGetContent: Loading...</p>}
-
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <BillingToPrint ref={componentRef} />
-
-      <Grid>
+      <Grid style={{ marginTop: "10px" }}>
         <Grid.Col span={12}>
           <Center>
-            <Button
-              variant="filled"
-              color={"violet"}
-              onClick={handlePrint}
-              leftIcon={<IconPrinter size={14} />}
-            >
-              In hóa đơn bán lẻ
-            </Button>
+            {loading === true ? (
+              <Button
+                variant="filled"
+                color={"violet"}
+                onClick={handlePrint}
+                leftIcon={<IconPrinter size={14} />}
+                loading
+                loaderPosition="right"
+              >
+                In hóa đơn bán lẻ
+              </Button>
+            ) : (
+              <Button
+                variant="filled"
+                color={"violet"}
+                onClick={handlePrint}
+                leftIcon={<IconPrinter size={14} />}
+              >
+                In hóa đơn bán lẻ
+              </Button>
+            )}
           </Center>
         </Grid.Col>
       </Grid>
-    </div>
+    </motion.div>
   );
 };
 
