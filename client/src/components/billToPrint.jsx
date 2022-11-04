@@ -11,6 +11,7 @@ import {
 } from '@mantine/core';
 import { IconBrandHtml5, IconPhoneCall } from '@tabler/icons';
 import * as React from 'react';
+import BackgroundLogo from '../image/backgroundlogo.png';
 import Logo from '../image/logo.png';
 
 export class ComponentToPrint extends React.PureComponent {
@@ -481,7 +482,7 @@ export class ComponentToPrint extends React.PureComponent {
                     </Col>
                     <Col span={12}>
                         <BackgroundImage
-                            src={Logo}
+                            src={BackgroundLogo}
                             style={{
                                 backgroundRepeat: 'no-repeat',
                                 backgroundSize: 'contain',
