@@ -3,7 +3,7 @@ const mongo = require('mongodb');
 
 const OrderDetailCollection = 'orderdetail';
 
-module.exports.Order = class Order {
+module.exports.OrderDetail = class OrderDetail {
     constructor(orderId, productId, productName, amount, price, note) {
         (this.orderId = orderId),
             (this.productId = productId),
