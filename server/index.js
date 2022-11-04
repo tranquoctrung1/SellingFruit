@@ -5,6 +5,12 @@ const path = require('path');
 const http = require('http');
 require('express-async-errors');
 
+const ConsumerRoute = require('./routers/consumer.router');
+const ProductRoute = require('./routers/product.router');
+const ProviderRoute = require('./routers/provider.router');
+const OrderRoute = require('./routers/order.router');
+const OrderDetailRoute = require('./routers/orderdetail.router');
+
 const cors = require('./middleware/cors');
 
 const app = express();
@@ -19,6 +25,12 @@ app.use('/', express.static(path.join(__dirname, '/public')));
 
 // use cors
 app.use(cors);
+
+app.use('/consumer', ConsumerRoute);
+app.use('/product', ProductRoute);
+app.use('/provider', ProviderRoute);
+app.use('/order', OrderRoute);
+app.use('/orderdetail', OrderDetailRoute);
 
 app.get('/', (req, res) => {
     res.json({ username: 'tranquoctrung' });
