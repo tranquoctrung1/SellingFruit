@@ -51,31 +51,31 @@ export class ComponentToPrint extends React.PureComponent {
 
             if (i <= fakeData.length - 1) {
                 body += `<tr>
-					<td style="border-color: red; padding-top: 2px; padding-bottom: 2px">
+					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
 							<Text color="red" size="md" style="color: red" >${i + 1}</Text>
 						</Center>
 					</td>
-					<td style="border-color: red; padding-top: 2px; padding-bottom: 2px">
+					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
 							<Text color="blue" size="md" style="color: #3498db" >
 								${fakeData[i].productName}
 							</Text>
 						</Center>
-					</td style="border-color: red; padding-top: 2px; padding-bottom: 2px">
-					<td style="border-color: red; padding-top: 2px; padding-bottom: 2px">
+					</td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
+					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
 							<Text color="blue" size="md" style="color: #3498db" >${
                                 fakeData[i].amount
                             }</Text>
 						</Center>
-					</td style="border-color: red; padding-top: 2px; padding-bottom: 2px">
-					<td style="border-color: red; padding-top: 2px; padding-bottom: 2px">
+					</td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
+					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
 							<Text color="blue" size="md" style="color: #3498db" >${fakeData[i].price}</Text>
 						</Center>
 					</td>
-					<td style="border-color: red; padding-top: 2px; padding-bottom: 2px">
+					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
 							<Text color="blue" size="md" style="color: #3498db" >${fakeData[i].total}</Text>
 						</Center>
@@ -84,27 +84,27 @@ export class ComponentToPrint extends React.PureComponent {
                 totalPrice += fakeData[i].total;
             } else {
                 body += `<tr>
-					<td style="border-color: red; padding-top: 2px; padding-bottom: 2px">
+					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
 							<Text color="red" size="md" style="color: red">${i + 1}</Text>
 						</Center>
 					</td>
-					<td style="border-color: red; padding-top: 2px; padding-bottom: 2px">
+					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
 							<Text color="blue" size="md" style="color: #3498db" ></Text>
 						</Center>
 					</td>
-					<td style="border-color: red; padding-top: 2px; padding-bottom: 2px">
+					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
 							<Text color="blue" size="md" style="color: #3498db" ></Text>
 						</Center>
 					</td>
-					<td style="border-color: red; padding-top: 2px; padding-bottom: 2px">
+					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
 							<Text color="blue" size="md" style="color: #3498db" ></Text>
 						</Center>
 					</td>
-					<td style="border-color: red; padding-top: 2px; padding-bottom: 2px">
+					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
 							<Text color="blue" size="md" style="color: #3498db"></Text>
 						</Center>
@@ -116,13 +116,13 @@ export class ComponentToPrint extends React.PureComponent {
         }
 
         dataForBody.push(`<tr>
-						<td style="border-color: red; padding-top: 2px; padding-bottom: 2px"></td>
-						<td colspan="3" style="border-color: red; padding-top: 2px; padding-bottom: 2px">
+						<td style="border-color: red; padding-top: 8px; padding-bottom: 8px"></td>
+						<td colspan="3" style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 							<Center>
 								<Text color="red" size="lg" transform="uppercase" style="color: red; font-weight: 500; text-transform: uppercase">Tổng Cộng</Text>
 							</Center>
 						</td>
-						<td style="border-color: red; padding-top: 2px; padding-bottom: 2px">
+						<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 							<Center>
 								<Text color="blue" size="md" style="color: #3498db" >${totalPrice}</Text>
 							</Center>
@@ -206,8 +206,8 @@ export class ComponentToPrint extends React.PureComponent {
                     >
                         <Center>
                             <Image
-                                width={100}
-                                height={100}
+                                width={200}
+                                height={200}
                                 radius="md"
                                 src={Logo}
                                 alt="Nhat Nam Food"
@@ -499,8 +499,8 @@ export class ComponentToPrint extends React.PureComponent {
                                         <th
                                             style={{
                                                 borderColor: 'red',
-                                                paddingTop: '2px',
-                                                paddingBottom: '2px',
+                                                paddingTop: '8px',
+                                                paddingBottom: '8px',
                                             }}
                                         >
                                             <Center>
@@ -516,8 +516,8 @@ export class ComponentToPrint extends React.PureComponent {
                                         <th
                                             style={{
                                                 borderColor: 'red',
-                                                paddingTop: '2px',
-                                                paddingBottom: '2px',
+                                                paddingTop: '8px',
+                                                paddingBottom: '8px',
                                             }}
                                         >
                                             <Center>
@@ -533,8 +533,8 @@ export class ComponentToPrint extends React.PureComponent {
                                         <th
                                             style={{
                                                 borderColor: 'red',
-                                                paddingTop: '2px',
-                                                paddingBottom: '2px',
+                                                paddingTop: '8px',
+                                                paddingBottom: '8px',
                                             }}
                                         >
                                             <Center>
@@ -550,8 +550,8 @@ export class ComponentToPrint extends React.PureComponent {
                                         <th
                                             style={{
                                                 borderColor: 'red',
-                                                paddingTop: '2px',
-                                                paddingBottom: '2px',
+                                                paddingTop: '8px',
+                                                paddingBottom: '8px',
                                             }}
                                         >
                                             <Center>
@@ -567,8 +567,8 @@ export class ComponentToPrint extends React.PureComponent {
                                         <th
                                             style={{
                                                 borderColor: 'red',
-                                                paddingTop: '2px',
-                                                paddingBottom: '2px',
+                                                paddingTop: '8px',
+                                                paddingBottom: '8px',
                                             }}
                                         >
                                             <Center>
@@ -609,6 +609,8 @@ export class ComponentToPrint extends React.PureComponent {
                             </Text>
                         </div>
                     </Col>
+                    <Col span={12}></Col>
+                    <Col span={12}></Col>
                     <Col
                         span={4}
                         style={{ paddingBottom: '50px', paddingTop: '0' }}
