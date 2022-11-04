@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	"start": "nodemon -e js,pug,sass index.js"
-
+    "start": "nodemon -e js,pug,sass index.js"
   },
   "author": "Quốc Trung",
   "license": "MIT",
@@ -17,6 +16,6 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",
-    "mongoose": "^6.7.1"
+    "mongodb": "^4.11.0"
   }
 }
