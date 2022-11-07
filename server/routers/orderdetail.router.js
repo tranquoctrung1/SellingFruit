@@ -6,8 +6,8 @@ const OrderDetailController = require('../controllers/orderdetail.controller');
 router.get('/getAll', OrderDetailController.getAll);
 
 router.get(
-    '/getOrderDetailByOderId',
-    OrderDetailController.getOrderDetailByOderId,
+    '/getOrderDetailByOrderId',
+    OrderDetailController.getOrderDetailByOrderId,
 );
 
 router.post('/insert', OrderDetailController.Insert);
