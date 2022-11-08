@@ -11,6 +11,7 @@ import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 
 import { useConsumer } from '../hooks/consumerHooks';
+import { useOrder } from '../hooks/orderHooks';
 
 const CreateBilling = () => {
     const form = useForm({
@@ -39,26 +40,72 @@ const CreateBilling = () => {
         },
     });
 
-    const { isLoading, data: consumers, error, isError } = useConsumer();
+    const {
+        isLoading: isLoadingOrder,
+        data: orders,
+        error: errorOrder,
+        isError: isErrorOrder,
+    } = useOrder();
+    const {
+        isLoading: isLoadingConsumer,
+        data: consumers,
+        error: errorConsumer,
+        isError: isErrorConsumer,
+    } = useConsumer();
 
-    if (isLoading) {
+    if (isLoadingConsumer && isLoadingOrder) {
         return <div>Loading ....</div>;
     }
 
-    if (isError) {
-        return <div>Error: {error.message}</div>;
+    if (isErrorConsumer && isErrorOrder) {
+        return (
+            <div>
+                Error: {errorConsumer.message} {errorOrder.message}{' '}
+            </div>
+        );
     }
-    if (consumers != null && consumers.length > 0) {
+
+    let listOrderIds = [];
+    if (orders != null && orders !== undefined) {
+        if (orders.length > 0) {
+            for (let order of orders) {
+                let findIndex = listOrderIds.indexOf(order.orderId);
+
+                if (findIndex === -1) {
+                    listOrderIds.push(order.orderId);
+                }
+            }
+        }
     }
 
     let listConsumerName = [];
-    for (let consumer of consumers) {
-        let findIndex = listConsumerName.indexOf(consumer.consumerName);
+    if (consumers != null && consumers !== undefined) {
+        if (consumers.length > 0) {
+            for (let consumer of consumers) {
+                let findIndex = listConsumerName.indexOf(consumer.consumerName);
 
-        if (findIndex === -1) {
-            listConsumerName.push(consumer.consumerName);
+                if (findIndex === -1) {
+                    listConsumerName.push(consumer.consumerName);
+                }
+            }
         }
     }
+
+    const handleOrderIdChange = (e) => {
+        let order = orders.find((el) => el.orderId === e);
+
+        form.setValues({
+            ...form.values,
+            orderId: order.orderId,
+            numberOrder: order.numberOrder,
+            consumerId: order.consumerId,
+            consumerName: order.consumerName,
+            address: order.address,
+            phoneNumber: order.phoneNumber,
+            note: order.note,
+            totalPrice: order.totalPrice,
+        });
+    };
 
     const handleConsumerNameChange = (e) => {
         let consumer = consumers.find((el) => el.consumerName === e);
@@ -91,16 +138,17 @@ const CreateBilling = () => {
             <form>
                 <Grid>
                     <Col md={6} sm={12}>
-                        <TextInput
+                        <Select
                             withAsterisk
                             label="Mã đơn hàng"
-                            placeholder="Nhập mã đơn hàng"
+                            placeholder="Mã đơn hàng"
+                            searchable
+                            creatable
+                            nothingFound="Không có đơn hàng"
+                            maxDropdownHeight={280}
+                            data={listOrderIds}
                             {...form.getInputProps('orderId')}
-                            style={{
-                                label: {
-                                    marginBottom: '5px',
-                                },
-                            }}
+                            onChange={handleOrderIdChange}
                         />
                     </Col>
                     <Col md={6} sm={12}>
