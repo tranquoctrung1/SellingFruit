@@ -7,8 +7,8 @@ import {
     Space,
     TextInput,
 } from '@mantine/core';
+import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
-import { useEffect, useState } from 'react';
 
 import { useConsumer } from '../hooks/consumerHooks';
 
@@ -21,7 +21,7 @@ const CreateBilling = () => {
             address: '',
             phoneNumber: '',
             numberOrder: '',
-            dateCreated: Date.now(),
+            dateCreated: new Date(Date.now()),
             totalPrice: 0,
             receiver: '',
             transpoter: '',
@@ -51,14 +51,28 @@ const CreateBilling = () => {
     if (consumers != null && consumers.length > 0) {
     }
 
-    let listConsunerNames = [];
+    let listConsumerName = [];
     for (let consumer of consumers) {
-        listConsunerNames.push(consumer.consumerId);
+        let findIndex = listConsumerName.indexOf(consumer.consumerName);
+
+        if (findIndex === -1) {
+            listConsumerName.push(consumer.consumerName);
+        }
     }
 
-    const handleOnSubmit = (e) => {
-        e.preventDefault();
+    const handleConsumerNameChange = (e) => {
+        let consumer = consumers.find((el) => el.consumerName === e);
 
+        form.setValues({
+            ...form.values,
+            consumerId: consumer.consumerId,
+            consumerName: consumer.consumerName,
+            address: consumer.address,
+            phoneNumber: consumer.phoneNumber,
+        });
+    };
+
+    const handleOnSubmit = (e) => {
         console.log(form.validate());
 
         console.log(form.values);
@@ -103,24 +117,25 @@ const CreateBilling = () => {
                         />
                     </Col>
                     <Col md={6} sm={12}>
-                        <TextInput
+                        <Select
                             withAsterisk
-                            label="Mã khách hàng"
-                            placeholder="Mã khách hàng"
-                            {...form.getInputProps('consumerId')}
-                            style={{
-                                label: {
-                                    marginBottom: '5px',
-                                },
-                            }}
+                            label="Tên khách hàng"
+                            placeholder="Tên khách hàng"
+                            searchable
+                            nothingFound="Không có khách hàng"
+                            maxDropdownHeight={280}
+                            data={listConsumerName}
+                            {...form.getInputProps('consumerName')}
+                            onChange={handleConsumerNameChange}
                         />
                     </Col>
                     <Col md={6} sm={12}>
                         <TextInput
                             withAsterisk
-                            label="Tên khách hàng"
-                            placeholder="Tên khách hàng"
-                            {...form.getInputProps('consumerName')}
+                            label="Mã khách hàng"
+                            placeholder="Mã khách hàng"
+                            disabled
+                            {...form.getInputProps('consumerId')}
                             style={{
                                 label: {
                                     marginBottom: '5px',
@@ -153,19 +168,15 @@ const CreateBilling = () => {
                         />
                     </Col>
                     <Col md={6} sm={12}>
-                        <TextInput
-                            withAsterisk
-                            label="Ngày tạo đơn hàng"
+                        <DatePicker
+                            allowFreeInput
                             placeholder="Ngày tạo đơn hàng"
+                            label="Ngày tạo đơn hàng"
+                            withAsterisk
                             {...form.getInputProps('dateCreated')}
-                            style={{
-                                label: {
-                                    marginBottom: '5px',
-                                },
-                            }}
                         />
                     </Col>
-                    <Col md={6} sm={12}>
+                    {/* <Col md={6} sm={12}>
                         <TextInput
                             label="Người giao hàng"
                             placeholder="Người giao hàng"
@@ -200,7 +211,7 @@ const CreateBilling = () => {
                                 },
                             }}
                         />
-                    </Col>
+                    </Col> */}
                     <Col md={6} sm={12}>
                         <TextInput
                             label="Tổng tiền"
@@ -223,17 +234,6 @@ const CreateBilling = () => {
                                     marginBottom: '5px',
                                 },
                             }}
-                        />
-                    </Col>
-                    <Col md={6} sm={12}>
-                        <Select
-                            label="Mã khách hàng"
-                            placeholder="Mã khách hàng"
-                            searchable
-                            nothingFound="Không có khách hàng"
-                            maxDropdownHeight={280}
-                            data={listConsunerNames}
-                            {...form.getInputProps('consumerId')}
                         />
                     </Col>
                     <Col span={12}>
