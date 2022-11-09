@@ -21,8 +21,20 @@ import { useState } from 'react';
 
 const CreateBilling = () => {
     const [isInsert, setIsInsert] = useState(false);
+    const [errorOrderId, setErrorOrderId] = useState('');
+    const [errorNumberOrder, setErrorNumberOrder] = useState('');
+    const [errorConsumerId, setErrorConsumerId] = useState('');
+    const [errorConsumerName, setErrorConsumerName] = useState('');
+    const [errorDateCreated, setErrorDateCreated] = useState('');
 
-    const { control, getValues, setValue } = useForm({
+    const {
+        control,
+        getValues,
+        setValue,
+        register,
+        formState: { errors },
+        reset,
+    } = useForm({
         defaultValues: {
             orderId: '',
             consumerId: '',
@@ -77,6 +89,7 @@ const CreateBilling = () => {
             </Grid>
         );
     }
+
     let listOrderIds = [];
     if (orders != null && orders !== undefined) {
         if (orders.length > 0) {
@@ -130,25 +143,180 @@ const CreateBilling = () => {
 
     const ChangeModeClicked = () => {
         setIsInsert(!isInsert);
-    };
-
-    const handleOrderIdBlur = (e) => {
-        let findIndex = listOrderIds.indexOf(e.target.value);
-
-        if (findIndex !== -1) {
-        }
+        reset((formValue) => ({ ...formValue, orderId: '' }));
     };
 
     const handleOnSubmit = (e) => {
-        console.log(getValues());
+        const formValue = getValues();
+        let isAllowSubmit = true;
+
+        if (formValue.orderId === '') {
+            setErrorOrderId('Mã đơn hàng không được bỏ trống!!');
+            isAllowSubmit = false;
+        } else {
+            let findIndexOrderId = listOrderIds.indexOf(formValue.orderId);
+
+            if (findIndexOrderId !== -1) {
+                setErrorOrderId('Mã đơn hàng đã tồn tại!!');
+                isAllowSubmit = false;
+            } else {
+                setErrorOrderId('');
+            }
+        }
+        if (formValue.numberOrder === '') {
+            setErrorNumberOrder('Số của đơn hàng không được trống!!');
+            isAllowSubmit = false;
+        } else {
+            if (/^\d+$/.test(formValue.numberOrder) == false) {
+                setErrorNumberOrder('Số của đơn hàng phải là số!!');
+                isAllowSubmit = false;
+            } else {
+                setErrorNumberOrder('');
+            }
+        }
+        if (formValue.consumerName === '') {
+            setErrorConsumerName('Tên khách hàng không được trống!!');
+            isAllowSubmit = false;
+        } else {
+            setErrorConsumerName('');
+        }
+        if (formValue.consumerId === '') {
+            setErrorConsumerId('Mã khách hàng không được trống!!');
+            isAllowSubmit = false;
+        } else {
+            setErrorConsumerId('');
+        }
+        if (formValue.dateCreated === '') {
+            setErrorDateCreated('Ngày tạo đơn hàng không được trống!!');
+            isAllowSubmit = false;
+        } else {
+            setErrorDateCreated('');
+        }
+
+        if (isAllowSubmit === true) {
+            console.log(formValue);
+        }
     };
 
     const handleOnUpdate = () => {
-        console.log('update');
+        const formValue = getValues();
+
+        let isAllowUpdate = true;
+
+        if (formValue.orderId === '') {
+            setErrorOrderId('Mã đơn hàng không được bỏ trống!!');
+            isAllowUpdate = false;
+        } else {
+            let findIndexOrderId = listOrderIds.indexOf(formValue.orderId);
+
+            if (findIndexOrderId !== -1) {
+                setErrorOrderId('Mã đơn hàng đã tồn tại!!');
+                isAllowUpdate = false;
+            } else {
+                setErrorOrderId('');
+            }
+        }
+        if (formValue.numberOrder === '') {
+            setErrorNumberOrder('Số của đơn hàng không được trống!!');
+            isAllowUpdate = false;
+        } else {
+            if (/^\d+$/.test(formValue.numberOrder) === false) {
+                setErrorNumberOrder('Số của đơn hàng phải là số!!');
+                isAllowUpdate = false;
+            } else {
+                setErrorNumberOrder('');
+            }
+        }
+        if (formValue.consumerName === '') {
+            setErrorConsumerName('Tên khách hàng không được trống!!');
+            isAllowUpdate = false;
+        } else {
+            setErrorConsumerName('');
+        }
+        if (formValue.consumerId === '') {
+            setErrorConsumerId('Mã khách hàng không được trống!!');
+            isAllowUpdate = false;
+        } else {
+            setErrorConsumerId('');
+        }
+        if (formValue.dateCreated === '') {
+            setErrorDateCreated('Ngày tạo đơn hàng không được trống!!');
+            isAllowUpdate = false;
+        } else {
+            setErrorDateCreated('');
+        }
+
+        if (isAllowUpdate === true) {
+            console.log(formValue);
+        }
     };
 
     const handleOnDelete = () => {
-        console.log('delte');
+        const formValue = getValues();
+
+        if (formValue.orderId === '') {
+            setErrorOrderId('Mã đơn hàng không được bỏ trống!!');
+        } else {
+            let findIndexOrderId = listOrderIds.indexOf(formValue.orderId);
+
+            if (findIndexOrderId !== -1) {
+                setErrorOrderId('Mã đơn hàng đã tồn tại!!');
+            } else {
+                setErrorOrderId('');
+
+                console.log(formValue.orderId);
+            }
+        }
+    };
+
+    const onOrderIdBlur = (e) => {
+        if (
+            e.target.value != null &&
+            e.target.value !== undefined &&
+            e.target.value !== ''
+        ) {
+            setErrorOrderId('');
+        }
+    };
+
+    const onNumberOrderBlur = (e) => {
+        if (
+            e.target.value != null &&
+            e.target.value !== undefined &&
+            e.target.value !== ''
+        ) {
+            setErrorNumberOrder('');
+        }
+    };
+
+    const onConsumerNameBlur = (e) => {
+        if (
+            e.target.value != null &&
+            e.target.value !== undefined &&
+            e.target.value !== ''
+        ) {
+            setErrorConsumerName('');
+        }
+    };
+
+    const onConsumerIdBlur = (e) => {
+        if (
+            e.target.value != null &&
+            e.target.value !== undefined &&
+            e.target.value !== ''
+        ) {
+            setErrorConsumerId('');
+        }
+    };
+
+    const onDateCreatedBlur = (e) => {
+        if (
+            e.target.value != null &&
+            e.target.value !== undefined &&
+            e.target.value !== ''
+        ) {
+            setErrorDateCreated('');
+        }
     };
 
     return (
@@ -181,7 +349,11 @@ const CreateBilling = () => {
                                         maxDropdownHeight={280}
                                         data={listOrderIds}
                                         onChange={handleOrderIdChange}
+                                        {...register('orderId', {
+                                            onBlur: onOrderIdBlur,
+                                        })}
                                         {...field}
+                                        error={errorOrderId}
                                     />
                                 )}
                             ></Controller>
@@ -194,7 +366,10 @@ const CreateBilling = () => {
                                         withAsterisk
                                         label="Mã đơn hàng"
                                         placeholder="Mã đơn hàng"
-                                        onBlur={handleOrderIdBlur}
+                                        error={errorOrderId}
+                                        {...register('orderId', {
+                                            onBlur: onOrderIdBlur,
+                                        })}
                                         {...field}
                                         style={{
                                             label: {
@@ -215,7 +390,11 @@ const CreateBilling = () => {
                                     withAsterisk
                                     label="Số của đơn hàng"
                                     placeholder="Nhập số của đơn hàng"
+                                    error={errorNumberOrder}
                                     {...field}
+                                    {...register('numberOrder', {
+                                        onBlur: onNumberOrderBlur,
+                                    })}
                                     style={{
                                         label: {
                                             marginBottom: '5px',
@@ -238,8 +417,12 @@ const CreateBilling = () => {
                                     nothingFound="Không có khách hàng"
                                     maxDropdownHeight={280}
                                     data={listConsumerName}
+                                    {...register('consumerName', {
+                                        onBlur: onConsumerNameBlur,
+                                    })}
                                     {...field}
                                     onChange={handleConsumerNameChange}
+                                    error={errorConsumerName}
                                 />
                             )}
                         ></Controller>
@@ -255,6 +438,10 @@ const CreateBilling = () => {
                                     placeholder="Mã khách hàng"
                                     disabled
                                     {...field}
+                                    {...register('consumerId', {
+                                        onBlur: onConsumerIdBlur,
+                                    })}
+                                    error={errorConsumerId}
                                     style={{
                                         label: {
                                             marginBottom: '5px',
@@ -310,6 +497,10 @@ const CreateBilling = () => {
                                     placeholder="Ngày tạo đơn hàng"
                                     label="Ngày tạo đơn hàng"
                                     withAsterisk
+                                    {...register('dateCreated', {
+                                        onBlur: onDateCreatedBlur,
+                                    })}
+                                    error={errorDateCreated}
                                     {...field}
                                 />
                             )}
@@ -333,7 +524,7 @@ const CreateBilling = () => {
                             )}
                         ></Controller>
                     </Col>
-                    <Col md={6} sm={12}>
+                    <Col span={12}>
                         <Controller
                             name="note"
                             control={control}
@@ -356,17 +547,27 @@ const CreateBilling = () => {
                     </Col>
                     <Col span={12}>
                         <Center>
-                            <Button onClick={handleOnSubmit} color="green">
-                                Thêm
-                            </Button>
-                            <Space w="md" />
-                            <Button onClick={handleOnUpdate} color="blue">
-                                Cập nhật
-                            </Button>
-                            <Space w="md" />
-                            <Button onClick={handleOnDelete} color="red">
-                                Xóa
-                            </Button>
+                            {isInsert === false ? (
+                                <>
+                                    <Button
+                                        onClick={handleOnUpdate}
+                                        color="blue"
+                                    >
+                                        Cập nhật
+                                    </Button>
+                                    <Space w="md" />
+                                    <Button
+                                        onClick={handleOnDelete}
+                                        color="red"
+                                    >
+                                        Xóa
+                                    </Button>
+                                </>
+                            ) : (
+                                <Button onClick={handleOnSubmit} color="green">
+                                    Thêm
+                                </Button>
+                            )}
                         </Center>
                     </Col>
                 </Grid>
