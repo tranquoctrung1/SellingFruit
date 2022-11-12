@@ -14,8 +14,12 @@ import { DatePicker } from '@mantine/dates';
 import { Controller, useForm } from 'react-hook-form';
 
 import { useConsumer } from '../hooks/consumerHooks';
-import { useOrder } from '../hooks/orderHooks';
+import { useInsertOrder, useOrder } from '../hooks/orderHooks';
 import CreateOrderDetail from './createOrderDetail';
+
+import 'react-notifications/lib/notifications.css';
+
+import { NotificationContainer } from 'react-notifications';
 
 import { useState } from 'react';
 
@@ -26,6 +30,8 @@ const CreateBilling = () => {
     const [errorConsumerId, setErrorConsumerId] = useState('');
     const [errorConsumerName, setErrorConsumerName] = useState('');
     const [errorDateCreated, setErrorDateCreated] = useState('');
+
+    const useInsertOrderMutation = useInsertOrder();
 
     const {
         control,
@@ -117,7 +123,7 @@ const CreateBilling = () => {
     }
 
     const handleOrderIdChange = (e) => {
-        let order = orders.find((el) => el.orderId === e);
+        let order = orders.find((el) => el.orderId === e.target.value);
 
         if (order !== undefined) {
             setValue('orderId', order.orderId);
@@ -194,7 +200,7 @@ const CreateBilling = () => {
         }
 
         if (isAllowSubmit === true) {
-            console.log(formValue);
+            useInsertOrderMutation.mutate(formValue);
         }
     };
 
@@ -321,6 +327,7 @@ const CreateBilling = () => {
 
     return (
         <div className="form-create-bill">
+            <NotificationContainer />
             <form>
                 <Grid>
                     <Col span={12}>
@@ -348,8 +355,8 @@ const CreateBilling = () => {
                                         nothingFound="Không có đơn hàng"
                                         maxDropdownHeight={280}
                                         data={listOrderIds}
-                                        onChange={handleOrderIdChange}
                                         {...register('orderId', {
+                                            onChange: handleOrderIdChange,
                                             onBlur: onOrderIdBlur,
                                         })}
                                         {...field}

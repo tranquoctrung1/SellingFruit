@@ -8,3 +8,11 @@ export const getAll = async () => {
 
     return result.data;
 };
+
+export const Insert = async (order) => {
+    let url = `${baseUrlForOrder}/Insert`;
+
+    let result = await axios.post(url, order);
+
+    return result.data;
+};
