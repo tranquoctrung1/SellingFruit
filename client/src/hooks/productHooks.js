@@ -3,6 +3,6 @@ import { getAll } from '../apis/product.api';
 
 export const useProduct = () =>
     useQuery(['product'], getAll, {
-        refetchOnMount: true,
-        refetchOnWindowFocus: true,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
     });

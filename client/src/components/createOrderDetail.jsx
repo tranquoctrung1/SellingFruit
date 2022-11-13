@@ -10,21 +10,30 @@ import {
 import { useOrderDetailGlobalState } from '../globalState/orderDetail.state';
 import { useProduct } from '../hooks/productHooks';
 
-import { useEffect } from 'react';
+import { useState } from 'react';
+
+import { useOrderDetail } from '../hooks/orderDetailHooks';
+
+import UpdateProductForOrderDetail from './updateProductForOrderDetail';
 
 const CreateOrderDetail = ({ orderId }) => {
     const { isLoading, data: products, error, isError } = useProduct();
 
-    const [orderDetail, setOrderDetail] = useOrderDetailGlobalState(
-        'orderDetail',
+    const {
+        isLoading: isLoadingOrderDetail,
+        IsError: isErrorOrderDetail,
+        data: orderDetail,
+        error: errorOrderDetail,
+    } = useOrderDetail(orderId);
+
+    const [listOrderDetail, setListOrderDetail] = useOrderDetailGlobalState(
+        'listOrderDetail',
         [],
     );
 
-    useEffect(() => {
-        console.log(orderId.value);
-    }, [orderId.value]);
+    let listTempOrderDetail = [];
 
-    if (isLoading) {
+    if (isLoading && isLoadingOrderDetail) {
         return (
             <Grid>
                 <Col span={12}>
@@ -36,7 +45,7 @@ const CreateOrderDetail = ({ orderId }) => {
         );
     }
 
-    if (isError) {
+    if (isError && isErrorOrderDetail) {
         return (
             <Grid>
                 <Col span={12}>
@@ -63,12 +72,34 @@ const CreateOrderDetail = ({ orderId }) => {
         }
     }
 
+    let listProductDefaultValue = [];
+    if (orderDetail != null && orderDetail !== undefined) {
+        if (orderDetail.length > 0) {
+            for (let item of orderDetail) {
+                listProductDefaultValue.push(item.productName);
+            }
+
+            setListOrderDetail([...orderDetail]);
+        }
+    }
+
     const handleProductChange = (e) => {
-        console.log(e);
+        listTempOrderDetail = e;
     };
 
     const handleUpdateListProductClick = () => {
-        console.log();
+        const tempSelectedProduct = [];
+
+        if (listTempOrderDetail.length > 0) {
+            for (let item of listTempOrderDetail) {
+                let findItem = products.find((el) => el.productName === item);
+                console.log(findItem);
+                if (findItem !== undefined) {
+                    tempSelectedProduct.push(findItem);
+                }
+            }
+            setListOrderDetail([...tempSelectedProduct]);
+        }
     };
 
     return (
@@ -82,7 +113,7 @@ const CreateOrderDetail = ({ orderId }) => {
                         searchable
                         nothingFound="Không tìm thấy sản phẩm"
                         onChange={handleProductChange}
-                        defaultValue={[listProducts[0], listProducts[1]]}
+                        defaultValue={listProductDefaultValue}
                     />
                 </Col>
                 <Col
@@ -101,6 +132,10 @@ const CreateOrderDetail = ({ orderId }) => {
                     >
                         Cập nhật SP
                     </Button>
+                </Col>
+
+                <Col span={12}>
+                    <UpdateProductForOrderDetail />
                 </Col>
             </Grid>
         </>

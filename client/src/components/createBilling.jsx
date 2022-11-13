@@ -25,6 +25,7 @@ import { useState } from 'react';
 
 const CreateBilling = () => {
     const [isInsert, setIsInsert] = useState(false);
+    const [selectedOrderId, setSelectedOrderId] = useState('');
     const [errorOrderId, setErrorOrderId] = useState('');
     const [errorNumberOrder, setErrorNumberOrder] = useState('');
     const [errorConsumerId, setErrorConsumerId] = useState('');
@@ -135,6 +136,8 @@ const CreateBilling = () => {
             setValue('dateCreated', order.dateCreated);
             setValue('totalPrice', order.totalPrice);
             setValue('note', order.note);
+
+            setSelectedOrderId(order.orderId);
         }
     };
 
@@ -549,9 +552,14 @@ const CreateBilling = () => {
                             )}
                         ></Controller>
                     </Col>
-                    <Col span={12}>
-                        <CreateOrderDetail orderId={getValues('orderId')} />
-                    </Col>
+                    {selectedOrderId !== '' &&
+                    selectedOrderId != null &&
+                    selectedOrderId !== undefined ? (
+                        <Col span={12}>
+                            <CreateOrderDetail orderId={selectedOrderId} />
+                        </Col>
+                    ) : null}
+
                     <Col span={12}>
                         <Center>
                             {isInsert === false ? (

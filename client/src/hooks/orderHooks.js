@@ -7,8 +7,8 @@ import client from '../client/client';
 
 export const useOrder = () =>
     useQuery(['order'], getAll, {
-        refetchOnMount: true,
-        refetchOnWindowFocus: true,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
     });
 
 export const useInsertOrder = () => {

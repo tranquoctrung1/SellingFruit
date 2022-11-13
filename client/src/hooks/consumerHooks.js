@@ -3,6 +3,6 @@ import { getAll } from '../apis/consumer.api';
 
 export const useConsumer = () =>
     useQuery(['consumer'], getAll, {
-        refetchOnMount: true,
-        refetchOnWindowFocus: true,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
     });
