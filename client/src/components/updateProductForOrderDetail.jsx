@@ -8,14 +8,15 @@ const UpdateProductForOrderDetail = () => {
         [],
     );
 
-    let listFormUpdate;
-
-    if (listOrderDetail.length > 0) {
-        listFormUpdate = listOrderDetail.map((item, key) => {
-            return <FormUpdateProductForOrderDetail product={item} key={key} />;
-        });
-    }
-    return <>{listFormUpdate}</>;
+    return (
+        <>
+            {listOrderDetail.map((item, key) => {
+                return (
+                    <FormUpdateProductForOrderDetail product={item} key={key} />
+                );
+            })}
+        </>
+    );
 };
 
 export default UpdateProductForOrderDetail;

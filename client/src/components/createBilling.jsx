@@ -322,11 +322,8 @@ const CreateBilling = () => {
             }).then((result) => {
                 if (result.isConfirmed) {
                     useDeleteOrderMutation.mutate(formValue.orderId);
-
                     deleteOrderDetail(formValue.orderId);
-
                     setListOrderDetail([]);
-
                     reset();
                 }
             });

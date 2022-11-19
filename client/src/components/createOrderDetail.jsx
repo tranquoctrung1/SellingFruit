@@ -31,6 +31,8 @@ const CreateOrderDetail = ({ orderId }) => {
         [],
     );
 
+    const [listTempOrderDetail, setListTempOrderDetail] = useState([]);
+
     useEffect(() => {
         let listProductDefaultValue = [];
         if (orderDetail != null && orderDetail !== undefined) {
@@ -47,7 +49,7 @@ const CreateOrderDetail = ({ orderId }) => {
         }
     }, [orderDetail]);
 
-    let listTempOrderDetail = [];
+    //let listTempOrderDetail = [];
 
     if (isLoading && isLoadingOrderDetail) {
         return (
@@ -89,23 +91,25 @@ const CreateOrderDetail = ({ orderId }) => {
     }
 
     const handleProductChange = (e) => {
-        listTempOrderDetail = e;
+        setListTempOrderDetail([...e]);
     };
 
     const handleUpdateListProductClick = () => {
         const tempSelectedProduct = [];
-
         if (listTempOrderDetail.length > 0) {
             for (let item of listTempOrderDetail) {
                 let findItem = products.find((el) => el.productName === item);
                 if (findItem !== undefined) {
-                    findItem.amount = 0;
-                    tempSelectedProduct.push(findItem);
+                    let findToCheckDuplicate = listOrderDetail.find(
+                        (el) => el.productName === findItem.productName,
+                    );
+                    if (findToCheckDuplicate === undefined) {
+                        findItem.amount = 0;
+                        tempSelectedProduct.push(findItem);
+                    }
                 }
             }
-            setListOrderDetail([...tempSelectedProduct]);
-        } else {
-            setListOrderDetail([]);
+            setListOrderDetail([...listOrderDetail, ...tempSelectedProduct]);
         }
     };
 
@@ -136,7 +140,7 @@ const CreateOrderDetail = ({ orderId }) => {
                         color="green"
                         onClick={handleUpdateListProductClick}
                     >
-                        Cập nhật SP
+                        Thêm SP
                     </Button>
                 </Col>
 

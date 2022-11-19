@@ -1,8 +1,18 @@
-import { Button, Col, Grid, Text, TextInput } from '@mantine/core';
+import {
+    ActionIcon,
+    Button,
+    Col,
+    Grid,
+    Space,
+    Text,
+    TextInput,
+} from '@mantine/core';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { useOrderDetailGlobalState } from '../globalState/orderDetail.state';
+
+import { IconPencil, IconTrash } from '@tabler/icons';
 
 const FormUpdateProductForOrderDetail = ({ product }) => {
     const [errorAmount, setErrorAmount] = useState('');
@@ -92,6 +102,18 @@ const FormUpdateProductForOrderDetail = ({ product }) => {
         }
     };
 
+    const onDeleteProductClicked = () => {
+        let temp = [];
+
+        for (let item of listOrderDetail) {
+            if (item.productId !== product.productId) {
+                temp.push(item);
+            }
+        }
+
+        setListOrderDetail([...temp]);
+    };
+
     return (
         <>
             <Grid
@@ -151,14 +173,21 @@ const FormUpdateProductForOrderDetail = ({ product }) => {
                         alignItems: 'flex-end',
                     }}
                 >
-                    <Button
-                        fullWidth
+                    <ActionIcon
                         variant="filled"
                         color="green"
                         onClick={onUpdateProductClicked}
                     >
-                        Cập nhật
-                    </Button>
+                        <IconPencil size={18} />
+                    </ActionIcon>
+                    <Space w="xs" />
+                    <ActionIcon
+                        variant="filled"
+                        color="red"
+                        onClick={onDeleteProductClicked}
+                    >
+                        <IconTrash size={18} />
+                    </ActionIcon>
                 </Col>
             </Grid>
         </>
