@@ -36,6 +36,7 @@ import {
     updateOrderDetail,
 } from '../apis/orderDetail.api';
 
+import { getValue } from '@testing-library/user-event/dist/utils';
 import Swal from 'sweetalert2';
 
 const CreateBilling = () => {
@@ -46,6 +47,7 @@ const CreateBilling = () => {
     const [errorConsumerId, setErrorConsumerId] = useState('');
     const [errorConsumerName, setErrorConsumerName] = useState('');
     const [errorDateCreated, setErrorDateCreated] = useState('');
+    const [dateCreated, setDateCreated] = useState(null);
 
     const useInsertOrderMutation = useInsertOrder();
     const useUpdateOrderMutation = useUpdateOrder();
@@ -155,7 +157,8 @@ const CreateBilling = () => {
             setValue('consumerName', order.consumerName);
             setValue('address', order.address);
             setValue('phoneNumber', order.phoneNumber);
-            setValue('dateCreated', order.dateCreated);
+            setValue('dateCreated', new Date(order.dateCreated));
+            setDateCreated(new Date(order.dateCreated));
             setValue('totalPrice', order.totalPrice);
             setValue('note', order.note);
 
@@ -225,6 +228,9 @@ const CreateBilling = () => {
         }
 
         if (isAllowSubmit === true) {
+            formValue.dateCreated.setHours(
+                formValue.dateCreated.getHours() + 7,
+            );
             useInsertOrderMutation.mutate(formValue);
             let temp = [];
 
@@ -284,6 +290,9 @@ const CreateBilling = () => {
         }
 
         if (isAllowUpdate === true) {
+            formValue.dateCreated.setHours(
+                formValue.dateCreated.getHours() + 7,
+            );
             useUpdateOrderMutation.mutate(formValue);
 
             let temp = [];
@@ -556,6 +565,7 @@ const CreateBilling = () => {
                             control={control}
                             render={({ field }) => (
                                 <DatePicker
+                                    defaultValue={dateCreated}
                                     allowFreeInput
                                     placeholder="Ngày tạo đơn hàng"
                                     label="Ngày tạo đơn hàng"
