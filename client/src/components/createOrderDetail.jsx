@@ -10,7 +10,7 @@ import {
 import { useOrderDetailGlobalState } from '../globalState/orderDetail.state';
 import { useProduct } from '../hooks/productHooks';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useOrderDetail } from '../hooks/orderDetailHooks';
 
@@ -30,6 +30,22 @@ const CreateOrderDetail = ({ orderId }) => {
         'listOrderDetail',
         [],
     );
+
+    useEffect(() => {
+        let listProductDefaultValue = [];
+        if (orderDetail != null && orderDetail !== undefined) {
+            if (orderDetail.length > 0) {
+                for (let item of orderDetail) {
+                    listProductDefaultValue.push(item.productName);
+                }
+                setListOrderDetail([...orderDetail]);
+            } else {
+                setListOrderDetail([]);
+            }
+        } else {
+            setListOrderDetail([]);
+        }
+    }, [orderDetail]);
 
     let listTempOrderDetail = [];
 
@@ -72,17 +88,6 @@ const CreateOrderDetail = ({ orderId }) => {
         }
     }
 
-    let listProductDefaultValue = [];
-    if (orderDetail != null && orderDetail !== undefined) {
-        if (orderDetail.length > 0) {
-            for (let item of orderDetail) {
-                listProductDefaultValue.push(item.productName);
-            }
-
-            setListOrderDetail([...orderDetail]);
-        }
-    }
-
     const handleProductChange = (e) => {
         listTempOrderDetail = e;
     };
@@ -99,6 +104,8 @@ const CreateOrderDetail = ({ orderId }) => {
                 }
             }
             setListOrderDetail([...tempSelectedProduct]);
+        } else {
+            setListOrderDetail([]);
         }
     };
 
@@ -113,7 +120,6 @@ const CreateOrderDetail = ({ orderId }) => {
                         searchable
                         nothingFound="Không tìm thấy sản phẩm"
                         onChange={handleProductChange}
-                        defaultValue={listProductDefaultValue}
                     />
                 </Col>
                 <Col

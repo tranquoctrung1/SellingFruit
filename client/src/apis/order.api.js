@@ -16,3 +16,19 @@ export const Insert = async (order) => {
 
     return result.data;
 };
+
+export const Update = async (order) => {
+    let url = `${baseUrlForOrder}/Update`;
+
+    let result = await axios.patch(url, order);
+
+    return result.data;
+};
+
+export const Delete = async (orderId) => {
+    let url = `${baseUrlForOrder}/Delete?orderId=${orderId}`;
+
+    let result = await axios.delete(url);
+
+    return result.data;
+};

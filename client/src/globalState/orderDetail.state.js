@@ -6,6 +6,8 @@ export const useOrderDetailGlobalState = (key, initialData) => [
     useQuery(key, () => initialData, {
         enabled: false,
         initialData: initialData,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
     }).data,
     (value) => {
         client.setQueryData(key, value);

@@ -41,17 +41,24 @@ module.exports.getOrderDetailByOrderId = async (orderId) => {
 module.exports.Insert = async (data) => {
     let Connect = new ConnectDB.Connect();
 
-    let collection = await Connect.connect(OrderDetailCollection);
+    let nRows = 0;
 
-    let result = await collection.insertMany(data);
+    let collection = await Connect.connect(OrderDetailCollection);
+    if (data.length > 0) {
+        let result = await collection.insertMany(data);
+
+        nRows = result.insertedCount;
+    } else {
+        nRows = 0;
+    }
 
     Connect.disconnect();
 
-    return result.insertedCount;
+    return nRows;
 };
 
-module.exports.Update = async (data) => {
-    await this.Delete(data.orderId);
+module.exports.Update = async (orderId, data) => {
+    await this.Delete(orderId);
 
     return await this.Insert(data);
 };

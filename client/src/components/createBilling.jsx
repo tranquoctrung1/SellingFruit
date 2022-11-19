@@ -14,7 +14,12 @@ import { DatePicker } from '@mantine/dates';
 import { Controller, useForm } from 'react-hook-form';
 
 import { useConsumer } from '../hooks/consumerHooks';
-import { useInsertOrder, useOrder } from '../hooks/orderHooks';
+import {
+    useDeleteOrder,
+    useInsertOrder,
+    useOrder,
+    useUpdateOrder,
+} from '../hooks/orderHooks';
 import CreateOrderDetail from './createOrderDetail';
 
 import 'react-notifications/lib/notifications.css';
@@ -25,7 +30,11 @@ import { useState } from 'react';
 
 import { useOrderDetailGlobalState } from '../globalState/orderDetail.state';
 
-import { insertOrderDetail } from '../apis/orderDetail.api';
+import {
+    deleteOrderDetail,
+    insertOrderDetail,
+    updateOrderDetail,
+} from '../apis/orderDetail.api';
 
 const CreateBilling = () => {
     const [isInsert, setIsInsert] = useState(false);
@@ -37,6 +46,8 @@ const CreateBilling = () => {
     const [errorDateCreated, setErrorDateCreated] = useState('');
 
     const useInsertOrderMutation = useInsertOrder();
+    const useUpdateOrderMutation = useUpdateOrder();
+    const useDeleteOrderMutation = useDeleteOrder();
 
     const [listOrderDetail, setListOrderDetail] = useOrderDetailGlobalState(
         'listOrderDetail',
@@ -239,15 +250,6 @@ const CreateBilling = () => {
         if (formValue.orderId === '') {
             setErrorOrderId('Mã đơn hàng không được bỏ trống!!');
             isAllowUpdate = false;
-        } else {
-            let findIndexOrderId = listOrderIds.indexOf(formValue.orderId);
-
-            if (findIndexOrderId !== -1) {
-                setErrorOrderId('Mã đơn hàng đã tồn tại!!');
-                isAllowUpdate = false;
-            } else {
-                setErrorOrderId('');
-            }
         }
         if (formValue.numberOrder === '') {
             setErrorNumberOrder('Số của đơn hàng không được trống!!');
@@ -280,7 +282,22 @@ const CreateBilling = () => {
         }
 
         if (isAllowUpdate === true) {
-            console.log(formValue);
+            useUpdateOrderMutation.mutate(formValue);
+
+            let temp = [];
+
+            for (let item of listOrderDetail) {
+                let obj = {};
+                obj.orderId = formValue.orderId;
+                obj.productId = item.productId;
+                obj.productName = item.productName;
+                obj.amount = item.amount;
+                obj.price = item.price;
+                obj.note = item.note;
+
+                temp.push(obj);
+            }
+            updateOrderDetail(temp, formValue.orderId);
         }
     };
 
@@ -290,15 +307,10 @@ const CreateBilling = () => {
         if (formValue.orderId === '') {
             setErrorOrderId('Mã đơn hàng không được bỏ trống!!');
         } else {
-            let findIndexOrderId = listOrderIds.indexOf(formValue.orderId);
+            setErrorOrderId('');
+            useDeleteOrderMutation.mutate(formValue.orderId);
 
-            if (findIndexOrderId !== -1) {
-                setErrorOrderId('Mã đơn hàng đã tồn tại!!');
-            } else {
-                setErrorOrderId('');
-
-                console.log(formValue.orderId);
-            }
+            deleteOrderDetail(formValue.orderId);
         }
     };
 
@@ -581,7 +593,7 @@ const CreateBilling = () => {
                     selectedOrderId != null &&
                     selectedOrderId !== undefined ? (
                         <Col span={12}>
-                            <CreateOrderDetail orderId={selectedOrderId} />
+                            <CreateOrderDetail orderId={getValues().orderId} />
                         </Col>
                     ) : null}
 

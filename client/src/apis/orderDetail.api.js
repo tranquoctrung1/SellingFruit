@@ -28,3 +28,42 @@ export const insertOrderDetail = (data) => {
             console.log(err.message);
         });
 };
+
+export const updateOrderDetail = (data, orderId) => {
+    let url = `${baseUrlForOrderDetail}/update`;
+    let obj = {};
+    obj.data = data;
+    obj.orderId = orderId;
+    axios
+        .patch(url, obj)
+        .then((res) => {
+            NotificationManager.success(
+                'Cập nhật thành công',
+                'Cập nhật chi tiết đơn hàng thành công',
+            );
+        })
+        .catch((err) => {
+            NotificationManager.error(
+                'Cập nhật lỗi',
+                'Cập nhật chi tiết đơn hàng lỗi',
+            );
+            console.log(err.message);
+        });
+};
+
+export const deleteOrderDetail = (orderId) => {
+    let url = `${baseUrlForOrderDetail}/delete?orderId=${orderId}`;
+
+    axios
+        .delete(url)
+        .then((res) => {
+            NotificationManager.success(
+                'Xóa thành công',
+                'Xóa chi tiết đơn hàng thành công',
+            );
+        })
+        .catch((err) => {
+            NotificationManager.error('Xóa lỗi', 'Xóa chi tiết đơn hàng lỗi');
+            console.log(err.message);
+        });
+};

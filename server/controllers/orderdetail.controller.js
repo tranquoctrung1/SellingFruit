@@ -34,12 +34,13 @@ module.exports.Insert = async (req, res) => {
 
 module.exports.Update = async (req, res) => {
     try {
-        let data = req.body;
+        let { data, orderId } = req.body;
 
-        let result = await OrderDetailModel.Update(data);
+        let result = await OrderDetailModel.Update(orderId, data);
 
         res.status(200).json(result);
     } catch (err) {
+        console.log(err);
         res.status(500).json(err.message);
     }
 };
