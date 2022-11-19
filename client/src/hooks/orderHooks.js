@@ -79,11 +79,10 @@ export const useDeleteOrder = () => {
         onSuccess: (data, variables, context) => {
             let temp = [];
             for (let item of context) {
-                if (item.orderId !== variables.orderId) {
+                if (item.orderId !== variables) {
                     temp.push(item);
                 }
             }
-
             client.setQueryData(['order'], [...temp]);
             NotificationManager.success(
                 'Xóa thành công',

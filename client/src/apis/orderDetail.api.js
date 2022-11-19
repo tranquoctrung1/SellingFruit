@@ -17,7 +17,6 @@ export const insertOrderDetail = (data) => {
     axios
         .post(url, data)
         .then((res) => {
-            console.log(res.data);
             NotificationManager.success(
                 'Thêm thành công',
                 'Thêm chi tiết đơn hàng thành công',

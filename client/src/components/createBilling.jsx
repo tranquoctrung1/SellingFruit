@@ -36,6 +36,8 @@ import {
     updateOrderDetail,
 } from '../apis/orderDetail.api';
 
+import Swal from 'sweetalert2';
+
 const CreateBilling = () => {
     const [isInsert, setIsInsert] = useState(false);
     const [selectedOrderId, setSelectedOrderId] = useState('');
@@ -308,9 +310,26 @@ const CreateBilling = () => {
             setErrorOrderId('Mã đơn hàng không được bỏ trống!!');
         } else {
             setErrorOrderId('');
-            useDeleteOrderMutation.mutate(formValue.orderId);
+            Swal.fire({
+                title: 'Bạn có chắc muốn xóa?',
+                text: 'Thinking before you click!!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#0f0',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    useDeleteOrderMutation.mutate(formValue.orderId);
 
-            deleteOrderDetail(formValue.orderId);
+                    deleteOrderDetail(formValue.orderId);
+
+                    setListOrderDetail([]);
+
+                    reset();
+                }
+            });
         }
     };
 
