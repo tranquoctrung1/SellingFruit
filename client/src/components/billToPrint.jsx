@@ -22,26 +22,7 @@ export class ComponentToPrint extends React.PureComponent {
     }
 
     render() {
-        let fakeData = [];
-        let objData1 = {};
-        objData1.productName = 'Táo góc 44';
-        objData1.amount = 15;
-        objData1.price = 10000;
-        objData1.total = objData1.amount * objData1.price;
-        fakeData.push(objData1);
-        let objData2 = {};
-        objData2.productName = 'Táo góc 55';
-        objData2.amount = 15;
-        objData2.price = 10000;
-        objData2.total = objData2.amount * objData2.price;
-        fakeData.push(objData2);
-
-        let objData3 = {};
-        objData3.productName = 'Táo góc 66';
-        objData3.amount = 15;
-        objData3.price = 10000;
-        objData3.total = objData3.amount * objData3.price;
-        fakeData.push(objData3);
+        let { order, orderDetail } = this.props;
 
         let totalPrice = 0;
 
@@ -49,7 +30,8 @@ export class ComponentToPrint extends React.PureComponent {
         for (let i = 0; i < 10; i++) {
             let body = '';
 
-            if (i <= fakeData.length - 1) {
+            if (i <= orderDetail.length - 1) {
+                let total = orderDetail[i].amount * orderDetail[i].price;
                 body += `<tr>
 					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
@@ -59,29 +41,31 @@ export class ComponentToPrint extends React.PureComponent {
 					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
 							<Text color="blue" size="md" style="color: #3498db" >
-								${fakeData[i].productName}
+								${orderDetail[i].productName}
 							</Text>
 						</Center>
 					</td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
 							<Text color="blue" size="md" style="color: #3498db" >${
-                                fakeData[i].amount
+                                orderDetail[i].amount
                             }</Text>
 						</Center>
 					</td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
-							<Text color="blue" size="md" style="color: #3498db" >${fakeData[i].price}</Text>
+							<Text color="blue" size="md" style="color: #3498db" >${
+                                orderDetail[i].price
+                            }</Text>
 						</Center>
 					</td>
 					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 						<Center>
-							<Text color="blue" size="md" style="color: #3498db" >${fakeData[i].total}</Text>
+							<Text color="blue" size="md" style="color: #3498db" >${total}</Text>
 						</Center>
 					</td>
 				</tr>`;
-                totalPrice += fakeData[i].total;
+                totalPrice += total;
             } else {
                 body += `<tr>
 					<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
@@ -124,7 +108,9 @@ export class ComponentToPrint extends React.PureComponent {
 						</td>
 						<td style="border-color: red; padding-top: 8px; padding-bottom: 8px">
 							<Center>
-								<Text color="blue" size="md" style="color: #3498db" >${totalPrice}</Text>
+								<Text color="blue" size="md" style="color: #3498db" >${
+                                    orderDetail.length > 0 ? totalPrice : ''
+                                }</Text>
 							</Center>
 						</td>
 						</tr>`);
@@ -132,6 +118,81 @@ export class ComponentToPrint extends React.PureComponent {
         function createBody() {
             return { __html: dataForBody.join('') };
         }
+
+        const num2Word2 = function () {
+            var t = [
+                    'không',
+                    'một',
+                    'hai',
+                    'ba',
+                    'bốn',
+                    'năm',
+                    'sáu',
+                    'bảy',
+                    'tám',
+                    'chín',
+                ],
+                r = function (r, n) {
+                    var o = '',
+                        a = Math.floor(r / 10),
+                        e = r % 10;
+                    return (
+                        a > 1
+                            ? ((o = ' ' + t[a] + ' mươi'),
+                              1 == e && (o += ' mốt'))
+                            : 1 == a
+                            ? ((o = ' mười'), 1 == e && (o += ' một'))
+                            : n && e > 0 && (o = ' lẻ'),
+                        5 == e && a >= 1
+                            ? (o += ' lăm')
+                            : 4 == e && a >= 1
+                            ? (o += ' tư')
+                            : (e > 1 || (1 == e && 0 == a)) &&
+                              (o += ' ' + t[e]),
+                        o
+                    );
+                },
+                n = function (n, o) {
+                    var a = '',
+                        e = Math.floor(n / 100),
+                        n = n % 100;
+                    return (
+                        o || e > 0
+                            ? ((a = ' ' + t[e] + ' trăm'), (a += r(n, !0)))
+                            : (a = r(n, !1)),
+                        a
+                    );
+                },
+                o = function (t, r) {
+                    var o = '',
+                        a = Math.floor(t / 1e6),
+                        t = t % 1e6;
+                    // eslint-disable-next-line no-unused-expressions
+                    a > 0 && ((o = n(a, r) + ' triệu'), (r = !0));
+                    var e = Math.floor(t / 1e3),
+                        t = t % 1e3;
+                    return (
+                        e > 0 && ((o += n(e, r) + ' ngàn'), (r = !0)),
+                        t > 0 && (o += n(t, r)),
+                        o
+                    );
+                };
+            return {
+                convert: function (r) {
+                    if (0 == r) return t[0];
+                    var ty;
+                    var n = '',
+                        a = '';
+                    do {
+                        ty = r % 1e9;
+                        r = Math.floor(r / 1e9);
+                        n = r > 0 ? o(ty, !0) + a + n : o(ty, !1) + a + n;
+                        a = ' tỷ';
+                    } while (r > 0);
+                    return n.trim();
+                },
+            };
+        };
 
         return (
             <div className="relativeCSS">
@@ -412,7 +473,7 @@ export class ComponentToPrint extends React.PureComponent {
                             </Text>
                             <Space w="xs" />
                             <Text size="md" color="red" weight={500}>
-                                0014141
+                                {order.numberOrder}
                             </Text>
                         </div>
                     </Col>
@@ -432,8 +493,7 @@ export class ComponentToPrint extends React.PureComponent {
                             </Text>
                             <Space w="xs" />
                             <Text size="md" color="blue" weight={500}>
-                                {' '}
-                                Đoài ĐL
+                                {order.consumerName}
                             </Text>
                         </div>
                     </Col>
@@ -453,8 +513,7 @@ export class ComponentToPrint extends React.PureComponent {
                             </Text>
                             <Space w="xs" />
                             <Text size="md" color="blue" weight={500}>
-                                {' '}
-                                Cty
+                                {order.phoneNumber}
                             </Text>
                         </div>
                     </Col>
@@ -474,9 +533,7 @@ export class ComponentToPrint extends React.PureComponent {
                             </Text>
                             <Space w="xs" />
                             <Text size="md" color="blue" weight={500}>
-                                {' '}
-                                123 Cao thắng, Phường Bến Nghé, Quận 1, TP Hồ
-                                Chí Minh
+                                {order.address}
                             </Text>
                         </div>
                     </Col>
@@ -605,7 +662,10 @@ export class ComponentToPrint extends React.PureComponent {
                             </Text>
                             <Space w="xs" />
                             <Text color="blue" size="md">
-                                bốn trăm năm mươi nghìn việt nam đồng
+                                {orderDetail.length > 0
+                                    ? num2Word2().convert(totalPrice) +
+                                      ' việt nam đồng'
+                                    : ''}
                             </Text>
                         </div>
                     </Col>
@@ -648,15 +708,21 @@ export class ComponentToPrint extends React.PureComponent {
                         >
                             <Text color="red">Ngày</Text>
                             <Space w="xs" />
-                            <Text color="blue">03</Text>
+                            <Text color="blue">
+                                {new Date(order.dateCreated).getDate()}
+                            </Text>
                             <Space w="xs" />
                             <Text color="red">tháng</Text>
                             <Space w="xs" />
-                            <Text color="blue">11</Text>
+                            <Text color="blue">
+                                {new Date(order.dateCreated).getMonth() + 1}
+                            </Text>
                             <Space w="xs" />
                             <Text color="red">năm</Text>
                             <Space w="xs" />
-                            <Text color="blue">2022</Text>
+                            <Text color="blue">
+                                {new Date(order.dateCreated).getFullYear()}
+                            </Text>
                         </div>
                         <Space w="sm"></Space>
                         <Center>
@@ -671,5 +737,5 @@ export class ComponentToPrint extends React.PureComponent {
     }
 }
 export const BillingToPrint = React.forwardRef((props, ref) => {
-    return <ComponentToPrint ref={ref} />;
+    return <ComponentToPrint {...props} ref={ref} />;
 });

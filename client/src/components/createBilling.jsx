@@ -28,6 +28,7 @@ import { NotificationContainer } from 'react-notifications';
 
 import { useState } from 'react';
 
+import { useOrderGlobalState } from '../globalState/currentOrder.state';
 import { useOrderDetailGlobalState } from '../globalState/orderDetail.state';
 
 import {
@@ -36,7 +37,6 @@ import {
     updateOrderDetail,
 } from '../apis/orderDetail.api';
 
-import { getValue } from '@testing-library/user-event/dist/utils';
 import Swal from 'sweetalert2';
 
 const CreateBilling = () => {
@@ -56,6 +56,11 @@ const CreateBilling = () => {
     const [listOrderDetail, setListOrderDetail] = useOrderDetailGlobalState(
         'listOrderDetail',
         [],
+    );
+
+    const [currentOrder, setCurrentOrder] = useOrderGlobalState(
+        'currentOrder',
+        {},
     );
 
     const {
@@ -163,6 +168,8 @@ const CreateBilling = () => {
             setValue('note', order.note);
 
             setSelectedOrderId(order.orderId);
+
+            setCurrentOrder(order);
         }
     };
 
@@ -333,6 +340,8 @@ const CreateBilling = () => {
                     useDeleteOrderMutation.mutate(formValue.orderId);
                     deleteOrderDetail(formValue.orderId);
                     setListOrderDetail([]);
+                    setCurrentOrder({});
+
                     reset();
                 }
             });

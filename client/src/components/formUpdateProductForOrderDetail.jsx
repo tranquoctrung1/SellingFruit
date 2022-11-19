@@ -98,6 +98,7 @@ const FormUpdateProductForOrderDetail = ({ product }) => {
                     break;
                 }
             }
+            setListOrderDetail([]);
             setListOrderDetail([...temp]);
         }
     };

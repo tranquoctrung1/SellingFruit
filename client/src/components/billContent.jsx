@@ -7,8 +7,21 @@ import { BillingToPrint } from './billToPrint';
 import { Button, Center, Col, Grid } from '@mantine/core';
 import { IconPrinter } from '@tabler/icons';
 
+import { useOrderGlobalState } from '../globalState/currentOrder.state';
+import { useOrderDetailGlobalState } from '../globalState/orderDetail.state';
+
 const BillContent = () => {
     const componentRef = useRef(null);
+
+    const [currentOrder, setCurrentOrder] = useOrderGlobalState(
+        'currentOrder',
+        {},
+    );
+
+    const [listOrderDetail, setListOrderDetail] = useOrderDetailGlobalState(
+        'listOrderDetail',
+        [],
+    );
 
     const onBeforeGetContentResolve = useRef(null);
 
@@ -45,7 +58,7 @@ const BillContent = () => {
 
     const handlePrint = useReactToPrint({
         content: reactToPrintContent,
-        documentTitle: 'AwesomeFileName',
+        documentTitle: currentOrder.customerName,
         onBeforeGetContent: handleOnBeforeGetContent,
         onBeforePrint: handleBeforePrint,
         onAfterPrint: handleAfterPrint,
@@ -59,38 +72,44 @@ const BillContent = () => {
         ) {
             onBeforeGetContentResolve.current();
         }
-    }, [onBeforeGetContentResolve.current, text]);
+    }, [onBeforeGetContentResolve.current, text, currentOrder]);
 
     return (
         <>
-            <BillingToPrint ref={componentRef} />
-            <Grid style={{ marginTop: '10px' }}>
-                <Col span={12}>
-                    <Center>
-                        {loading === true ? (
-                            <Button
-                                variant="filled"
-                                color={'violet'}
-                                onClick={handlePrint}
-                                leftIcon={<IconPrinter size={14} />}
-                                loading
-                                loaderPosition="right"
-                            >
-                                In hóa đơn bán lẻ
-                            </Button>
-                        ) : (
-                            <Button
-                                variant="filled"
-                                color={'violet'}
-                                onClick={handlePrint}
-                                leftIcon={<IconPrinter size={14} />}
-                            >
-                                In hóa đơn bán lẻ
-                            </Button>
-                        )}
-                    </Center>
-                </Col>
-            </Grid>
+            <BillingToPrint
+                order={currentOrder}
+                orderDetail={listOrderDetail}
+                ref={componentRef}
+            />
+            {currentOrder.status === 1 ? (
+                <Grid style={{ marginTop: '10px' }}>
+                    <Col span={12}>
+                        <Center>
+                            {loading === true ? (
+                                <Button
+                                    variant="filled"
+                                    color={'violet'}
+                                    onClick={handlePrint}
+                                    leftIcon={<IconPrinter size={14} />}
+                                    loading
+                                    loaderPosition="right"
+                                >
+                                    In hóa đơn bán lẻ
+                                </Button>
+                            ) : (
+                                <Button
+                                    variant="filled"
+                                    color={'violet'}
+                                    onClick={handlePrint}
+                                    leftIcon={<IconPrinter size={14} />}
+                                >
+                                    In hóa đơn bán lẻ
+                                </Button>
+                            )}
+                        </Center>
+                    </Col>
+                </Grid>
+            ) : null}
         </>
     );
 };
