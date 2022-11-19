@@ -43,24 +43,11 @@ module.exports.Insert = async (data) => {
 
     let collection = await Connect.connect(OrderDetailCollection);
 
-    let check = await collection.find({ orderId: data.orderId }).toArray();
+    let result = await collection.insertMany(data);
 
-    if (check.length <= 0) {
-        let temp = [];
-        temp.push(data);
+    Connect.disconnect();
 
-        let result = await collection.insertMany(temp);
-
-        if (result.insertedCount >= 1) {
-            return await collection.find({ orderId: data.orderId }).toArray();
-        }
-
-        Connect.disconnect();
-
-        return result;
-    }
-
-    return 0;
+    return result.insertedCount;
 };
 
 module.exports.Update = async (data) => {

@@ -23,6 +23,10 @@ import { NotificationContainer } from 'react-notifications';
 
 import { useState } from 'react';
 
+import { useOrderDetailGlobalState } from '../globalState/orderDetail.state';
+
+import { insertOrderDetail } from '../apis/orderDetail.api';
+
 const CreateBilling = () => {
     const [isInsert, setIsInsert] = useState(false);
     const [selectedOrderId, setSelectedOrderId] = useState('');
@@ -33,6 +37,11 @@ const CreateBilling = () => {
     const [errorDateCreated, setErrorDateCreated] = useState('');
 
     const useInsertOrderMutation = useInsertOrder();
+
+    const [listOrderDetail, setListOrderDetail] = useOrderDetailGlobalState(
+        'listOrderDetail',
+        [],
+    );
 
     const {
         control,
@@ -204,6 +213,21 @@ const CreateBilling = () => {
 
         if (isAllowSubmit === true) {
             useInsertOrderMutation.mutate(formValue);
+            let temp = [];
+
+            for (let item of listOrderDetail) {
+                let obj = {};
+                obj.orderId = formValue.orderId;
+                obj.productId = item.productId;
+                obj.productName = item.productName;
+                obj.amount = item.amount;
+                obj.price = item.price;
+                obj.note = item.note;
+
+                temp.push(obj);
+            }
+
+            insertOrderDetail(temp);
         }
     };
 
@@ -285,6 +309,7 @@ const CreateBilling = () => {
             e.target.value !== ''
         ) {
             setErrorOrderId('');
+            setSelectedOrderId(e.target.value);
         }
     };
 
@@ -497,7 +522,7 @@ const CreateBilling = () => {
                             )}
                         ></Controller>
                     </Col>
-                    <Col md={6} sm={12}>
+                    <Col span={12}>
                         <Controller
                             name="dateCreated"
                             control={control}
@@ -516,7 +541,7 @@ const CreateBilling = () => {
                             )}
                         ></Controller>
                     </Col>
-                    <Col md={6} sm={12}>
+                    {/* <Col md={6} sm={12}>
                         <Controller
                             name="totalPrice"
                             control={control}
@@ -533,7 +558,7 @@ const CreateBilling = () => {
                                 />
                             )}
                         ></Controller>
-                    </Col>
+                    </Col> */}
                     <Col span={12}>
                         <Controller
                             name="note"

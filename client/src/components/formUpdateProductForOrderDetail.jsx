@@ -2,9 +2,16 @@ import { Button, Col, Grid, Text, TextInput } from '@mantine/core';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
+import { useOrderDetailGlobalState } from '../globalState/orderDetail.state';
+
 const FormUpdateProductForOrderDetail = ({ product }) => {
     const [errorAmount, setErrorAmount] = useState('');
     const [errorPrice, setErrorPrice] = useState('');
+
+    const [listOrderDetail, setListOrderDetail] = useOrderDetailGlobalState(
+        'listOrderDetail',
+        [],
+    );
 
     const {
         control,
@@ -17,7 +24,7 @@ const FormUpdateProductForOrderDetail = ({ product }) => {
         defaultValues: {
             productId: product.productId,
             productName: product.productName,
-            amount: 0,
+            amount: product.amount || 0,
             price: product.price,
             note: product.note,
         },
@@ -73,7 +80,15 @@ const FormUpdateProductForOrderDetail = ({ product }) => {
         }
 
         if (isAllowUpdate === true) {
-            console.log(formValue);
+            let temp = listOrderDetail;
+            for (let item of temp) {
+                if (item.productId === formValue.productId) {
+                    item.amount = formValue.amount;
+                    item.price = formValue.price;
+                    break;
+                }
+            }
+            setListOrderDetail([...temp]);
         }
     };
 

@@ -10,9 +10,9 @@ import client from './client/client';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <QueryClientProvider client={client}>
-        <React.StrictMode>
-            <App />
-        </React.StrictMode>
+        {/* <React.StrictMode> */}
+        <App />
+        {/* </React.StrictMode> */}
     </QueryClientProvider>,
 );
 

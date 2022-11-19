@@ -93,8 +93,8 @@ const CreateOrderDetail = ({ orderId }) => {
         if (listTempOrderDetail.length > 0) {
             for (let item of listTempOrderDetail) {
                 let findItem = products.find((el) => el.productName === item);
-                console.log(findItem);
                 if (findItem !== undefined) {
+                    findItem.amount = 0;
                     tempSelectedProduct.push(findItem);
                 }
             }
