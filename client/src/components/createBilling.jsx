@@ -254,6 +254,8 @@ const CreateBilling = () => {
             }
 
             insertOrderDetail(temp);
+
+            setCurrentOrder(formValue);
         }
     };
 
@@ -316,6 +318,7 @@ const CreateBilling = () => {
                 temp.push(obj);
             }
             updateOrderDetail(temp, formValue.orderId);
+            setCurrentOrder(formValue);
         }
     };
 

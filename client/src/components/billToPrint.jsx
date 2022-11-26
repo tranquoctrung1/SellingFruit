@@ -709,19 +709,31 @@ export class ComponentToPrint extends React.PureComponent {
                             <Text color="red">Ngày</Text>
                             <Space w="xs" />
                             <Text color="blue">
-                                {new Date(order.dateCreated).getDate()}
+                                {order.dateCreated !== '' &&
+                                order.dateCreated !== null &&
+                                order.dateCreated !== undefined
+                                    ? new Date(order.dateCreated).getDate()
+                                    : ''}
                             </Text>
                             <Space w="xs" />
                             <Text color="red">tháng</Text>
                             <Space w="xs" />
                             <Text color="blue">
-                                {new Date(order.dateCreated).getMonth() + 1}
+                                {order.dateCreated !== '' &&
+                                order.dateCreated !== null &&
+                                order.dateCreated !== undefined
+                                    ? new Date(order.dateCreated).getMonth() + 1
+                                    : ''}
                             </Text>
                             <Space w="xs" />
                             <Text color="red">năm</Text>
                             <Space w="xs" />
                             <Text color="blue">
-                                {new Date(order.dateCreated).getFullYear()}
+                                {order.dateCreated !== '' &&
+                                order.dateCreated !== null &&
+                                order.dateCreated !== undefined
+                                    ? new Date(order.dateCreated).getFullYear()
+                                    : ''}
                             </Text>
                         </div>
                         <Space w="sm"></Space>

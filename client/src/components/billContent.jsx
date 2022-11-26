@@ -81,7 +81,7 @@ const BillContent = () => {
                 orderDetail={listOrderDetail}
                 ref={componentRef}
             />
-            {currentOrder.status === 1 ? (
+            {/* {currentOrder.status === 1 ? (
                 <Grid style={{ marginTop: '10px' }}>
                     <Col span={12}>
                         <Center>
@@ -109,7 +109,34 @@ const BillContent = () => {
                         </Center>
                     </Col>
                 </Grid>
-            ) : null}
+            ) : null} */}
+            <Grid style={{ marginTop: '10px' }}>
+                <Col span={12}>
+                    <Center>
+                        {loading === true ? (
+                            <Button
+                                variant="filled"
+                                color={'violet'}
+                                onClick={handlePrint}
+                                leftIcon={<IconPrinter size={14} />}
+                                loading
+                                loaderPosition="right"
+                            >
+                                In hóa đơn bán lẻ
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="filled"
+                                color={'violet'}
+                                onClick={handlePrint}
+                                leftIcon={<IconPrinter size={14} />}
+                            >
+                                In hóa đơn bán lẻ
+                            </Button>
+                        )}
+                    </Center>
+                </Col>
+            </Grid>
         </>
     );
 };
