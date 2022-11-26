@@ -1,14 +1,14 @@
 import {
-    Button,
-    Center,
-    Checkbox,
-    Col,
-    Grid,
-    Loader,
-    Select,
-    Space,
-    Text,
-    TextInput,
+	Button,
+	Center,
+	Checkbox,
+	Col,
+	Grid,
+	Loader,
+	Select,
+	Space,
+	Text,
+	TextInput
 } from '@mantine/core';
 
 import { Controller, useForm } from 'react-hook-form';
@@ -16,37 +16,36 @@ import { Controller, useForm } from 'react-hook-form';
 import { useState } from 'react';
 
 import {
-    useConsumer,
-    useDeleteConsumer,
-    useInsertConsumer,
-    useUpdateConsumer,
-} from '../hooks/consumerHooks';
+	useDeleteProvider,
+	useInsertProvider,
+	useProvider,
+	useUpdateProvider
+} from '../hooks/providerHooks';
 
 import Swal from 'sweetalert2';
 
 import { NotificationContainer } from 'react-notifications';
 
-const CreateConsumer = () => {
+const CreateProvider = () => {
     const [isInsertMode, setIsInsertMode] = useState(false);
-    const [errorConsumerId, setErrorConsumerId] = useState('');
+    const [errorProviderId, setErrorProviderId] = useState('');
 
     const { control, getValues, reset, setValue, register } = useForm({
         defaultValues: {
-            consumerId: '',
-            consumerName: '',
-            staffId: '',
-            staffName: '',
+            providerId: '',
+            providerName: '',
             address: '',
             phoneNumber: '',
             note: '',
+            staffId: '',
         },
     });
 
-    const useInsertConsumerMutation = useInsertConsumer();
-    const useUpdateConsumerMutation = useUpdateConsumer();
-    const useDeleteConsumerMutation = useDeleteConsumer();
+    const useInsertProviderMutation = useInsertProvider();
+    const useUpdateProviderMutation = useUpdateProvider();
+    const useDeleteProviderMutation = useDeleteProvider();
 
-    const { isLoading, data: consumers, error, isError } = useConsumer();
+    const { isLoading, data: providers, error, isError } = useProvider();
 
     if (isLoading) {
         return (
@@ -74,26 +73,26 @@ const CreateConsumer = () => {
         );
     }
 
-    const listConsumerId = [];
+    const listProviderId = [];
 
-    const setListConsumerId = () => {
-        for (let consumer of consumers) {
-            let index = listConsumerId.indexOf(consumer.consumerId);
+    const setListProviderId = () => {
+        for (let provider of providers) {
+            let index = listProviderId.indexOf(provider.providerId);
             if (index === -1) {
-                listConsumerId.push(consumer.consumerId);
+                listProviderId.push(provider.providerId);
             }
         }
     };
 
-    setListConsumerId();
+    setListProviderId();
 
     const onChangeModeClicked = (e) => {
         setIsInsertMode(e.target.checked);
         reset();
     };
 
-    const checkExistsConsumerId = (consumerId, data) => {
-        let findIndex = data.findIndex((el) => el.consumerId === consumerId);
+    const checkExistsProviderId = (providerId, data) => {
+        let findIndex = data.findIndex((el) => el.providerId === providerId);
 
         if (findIndex !== -1) {
             return true;
@@ -102,25 +101,25 @@ const CreateConsumer = () => {
         }
     };
 
-    const onConsumerIdBlur = (e) => {
+    const onProviderIdBlur = (e) => {
         if (
             e.target.value === null ||
             e.target.value === undefined ||
             e.target.value === ''
         ) {
-            setErrorConsumerId('Mã khách hàng không được trống!!!');
-        } else if (checkExistsConsumerId(e.target.value, consumers) === true) {
-            setErrorConsumerId('Mã khách hàng đã trùng!!!');
+            setErrorProviderId('Mã nhà cung cấp không được trống!!!');
+        } else if (checkExistsProviderId(e.target.value, providers) === true) {
+            setErrorProviderId('Mã nhà cung cấp đã trùng!!!');
         } else {
-            setErrorConsumerId('');
+            setErrorProviderId('');
         }
     };
 
-    const onConsumerIdChange = (e) => {
-        let find = consumers.find((el) => el.consumerId === e.target.value);
+    const onProviderIdChange = (e) => {
+        let find = providers.find((el) => el.providerId === e.target.value);
 
         if (find !== undefined) {
-            setValue('consumerName', find.consumerName);
+            setValue('providerName', find.providerName);
             setValue('address', find.address);
             setValue('phoneNumber', find.phoneNumber);
             setValue('note', find.note);
@@ -133,23 +132,23 @@ const CreateConsumer = () => {
         let isAllow = true;
 
         if (
-            formValue.consumerId === null ||
-            formValue.consumerId === undefined ||
-            formValue.consumerId === ''
+            formValue.providerId === null ||
+            formValue.providerId === undefined ||
+            formValue.providerId === ''
         ) {
-            setErrorConsumerId('Mã khách hàng không được trống!!!');
+            setErrorProviderId('Mã nhà cung cấp không được trống!!!');
             isAllow = false;
         } else if (
-            checkExistsConsumerId(formValue.consumerId, consumers) === true
+            checkExistsProviderId(formValue.providerId, providers) === true
         ) {
-            setErrorConsumerId('Mã khách hàng đã trùng!!!');
+            setErrorProviderId('Mã nhà cung cấp đã trùng!!!');
             isAllow = false;
         } else {
-            setErrorConsumerId('');
+            setErrorProviderId('');
         }
 
         if (isAllow === true) {
-            useInsertConsumerMutation.mutate(formValue);
+            useInsertProviderMutation.mutate(formValue);
         }
     };
 
@@ -159,18 +158,18 @@ const CreateConsumer = () => {
         let isAllow = true;
 
         if (
-            formValue.consumerId === null ||
-            formValue.consumerId === undefined ||
-            formValue.consumerId === ''
+            formValue.providerId === null ||
+            formValue.providerId === undefined ||
+            formValue.providerId === ''
         ) {
-            setErrorConsumerId('Mã khách hàng không được trống!!!');
+            setErrorProviderId('Mã nhà cung cấp không được trống!!!');
             isAllow = false;
         } else {
-            setErrorConsumerId('');
+            setErrorProviderId('');
         }
 
         if (isAllow === true) {
-            useUpdateConsumerMutation.mutate(formValue);
+            useUpdateProviderMutation.mutate(formValue);
         }
     };
 
@@ -180,14 +179,14 @@ const CreateConsumer = () => {
         let isAllow = true;
 
         if (
-            formValue.consumerId === null ||
-            formValue.consumerId === undefined ||
-            formValue.consumerId === ''
+            formValue.providerId === null ||
+            formValue.providerId === undefined ||
+            formValue.providerId === ''
         ) {
-            setErrorConsumerId('Mã khách hàng không được trống!!!');
+            setErrorProviderId('Mã nhà cung cấp không được trống!!!');
             isAllow = false;
         } else {
-            setErrorConsumerId('');
+            setErrorProviderId('');
         }
 
         if (isAllow === true) {
@@ -202,13 +201,12 @@ const CreateConsumer = () => {
                 cancelButtonText: 'Hủy',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    useDeleteConsumerMutation.mutate(formValue.consumerId);
+                    useDeleteProviderMutation.mutate(formValue.providerId);
                     reset();
                 }
             });
         }
     };
-
     return (
         <>
             <NotificationContainer />
@@ -226,38 +224,38 @@ const CreateConsumer = () => {
                 <Col sm={12} md={6}>
                     {isInsertMode === true ? (
                         <Controller
-                            name="consumerId"
+                            name="providerId"
                             control={control}
                             render={({ field }) => (
                                 <TextInput
-                                    placeholder="Mã khách hàng"
-                                    label="Mã khách hàng"
+                                    placeholder="Mã nhà cung cấp"
+                                    label="Mã nhà cung cấp"
                                     withAsterisk
-                                    {...register('consumerId', {
-                                        onBlur: onConsumerIdBlur,
+                                    {...register('providerId', {
+                                        onBlur: onProviderIdBlur,
                                     })}
                                     {...field}
-                                    error={errorConsumerId}
+                                    error={errorProviderId}
                                 />
                             )}
                         ></Controller>
                     ) : (
                         <Controller
-                            name="consumerId"
+                            name="providerId"
                             control={control}
                             render={({ field }) => (
                                 <Select
-                                    label="Mã khách hàng"
-                                    placeholder="Mã khách hàng"
+                                    label="Mã nhà cung cấp"
+                                    placeholder="Mã nhà cung cấp"
                                     searchable
-                                    nothingFound="Không có khách hàng"
+                                    nothingFound="Không có nhà cung cấp"
                                     withAsterisk
-                                    data={listConsumerId}
-                                    {...register('consumerId', {
-                                        onChange: onConsumerIdChange,
+                                    data={listProviderId}
+                                    {...register('providerId', {
+                                        onChange: onProviderIdChange,
                                     })}
                                     {...field}
-                                    error={errorConsumerId}
+                                    error={errorProviderId}
                                 />
                             )}
                         ></Controller>
@@ -265,12 +263,12 @@ const CreateConsumer = () => {
                 </Col>
                 <Col sm={12} md={6}>
                     <Controller
-                        name="consumerName"
+                        name="providerName"
                         control={control}
                         render={({ field }) => (
                             <TextInput
-                                placeholder="Tên khách hàng"
-                                label="Tên khách hàng"
+                                placeholder="Tên nhà cung cấp"
+                                label="Tên nhà cung cấp"
                                 {...field}
                             />
                         )}
@@ -351,4 +349,4 @@ const CreateConsumer = () => {
     );
 };
 
-export default CreateConsumer;
+export default CreateProvider;
