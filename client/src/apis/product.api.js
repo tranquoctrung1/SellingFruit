@@ -11,7 +11,6 @@ export const getAll = async () => {
 };
 
 export const Insert = async (product) => {
-    console.log(product);
     let url = `${baseUrlForProduct}/insert`;
 
     let result = await axios.post(url, product);

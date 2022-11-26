@@ -87,7 +87,7 @@ module.exports.Update = async (data) => {
 
     Connect.disconnect();
 
-    return result;
+    return result.modifiedCount;
 };
 
 module.exports.Delete = async (providerId) => {
@@ -99,5 +99,5 @@ module.exports.Delete = async (providerId) => {
 
     Connect.disconnect();
 
-    return result;
+    return result.deletedCount;
 };
