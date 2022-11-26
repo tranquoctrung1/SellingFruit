@@ -61,7 +61,7 @@ module.exports.Insert = async (data) => {
         return result;
     }
 
-    return 0;
+    return [];
 };
 
 module.exports.Update = async (data) => {
@@ -84,7 +84,7 @@ module.exports.Update = async (data) => {
 
     Connect.disconnect();
 
-    return result;
+    return result.modifiedCount;
 };
 
 module.exports.Delete = async (productId) => {
@@ -96,5 +96,5 @@ module.exports.Delete = async (productId) => {
 
     Connect.disconnect();
 
-    return result;
+    return result.deletedCount;
 };
