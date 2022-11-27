@@ -85,7 +85,7 @@ export const useDeleteProduct = () => {
             client.setQueryData(['product'], [...temp]);
             NotificationManager.success(
                 'Xóa thành công',
-                'Xóa đơn sản phẩm công',
+                'Xóa sản phẩm thành công',
             );
         },
         onError: (error, variables, context) => {
