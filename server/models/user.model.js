@@ -1,5 +1,6 @@
 const ConnectDB = require('../db/connect');
 const mongo = require('mongodb');
+const bcrypt = require('bcryptjs');
 
 const UserCollection = 'user';
 
@@ -32,6 +33,11 @@ module.exports.Insert = async (data) => {
     let check = await collection.find({ username: data.username }).toArray();
 
     if (check.length <= 0) {
+        let salt = bcrypt.genSaltSync(parseInt(process.env.GEN_SALT || 10));
+        let password = bcrypt.hashSync(data.password, salt);
+
+        data.password = password;
+
         let temp = [];
         temp.push(data);
 
@@ -53,6 +59,11 @@ module.exports.Update = async (data) => {
     let Connect = new ConnectDB.Connect();
 
     let collection = await Connect.connect(UserCollection);
+
+    let salt = bcrypt.genSaltSync(parseInt(process.env.GEN_SALT || 10));
+    let password = bcrypt.hashSync(data.password, salt);
+
+    data.password = password;
 
     const result = await collection.updateMany(
         { username: data.username },

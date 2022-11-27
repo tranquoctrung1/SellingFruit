@@ -24,12 +24,12 @@ export const useInsertUser = () => {
             client.setQueryData(['user'], [...context, variables]);
             NotificationManager.success(
                 'Thêm thành công',
-                'Thêm người dùng thành công',
+                'Thêm tài khoản thành công',
             );
         },
         onError: (error, variables, context) => {
             client.setQueryData(['user'], [...context]);
-            NotificationManager.error('Thêm lỗi', 'Thêm người dùng lỗi');
+            NotificationManager.error('Thêm lỗi', 'Thêm tài khoản lỗi');
         },
     });
 };
@@ -55,15 +55,12 @@ export const useUpdateUser = () => {
             client.setQueryData(['user'], [...temp]);
             NotificationManager.success(
                 'Cập nhật thành công',
-                'Cập nhật người dùng thành công',
+                'Cập nhật tài khoản thành công',
             );
         },
         onError: (error, variables, context) => {
             client.setQueryData(['user'], [...context]);
-            NotificationManager.error(
-                'Cập nhật lỗi',
-                'Cập nhật người dùng lỗi',
-            );
+            NotificationManager.error('Cập nhật lỗi', 'Cập nhật tài khoản lỗi');
         },
     });
 };
@@ -88,12 +85,12 @@ export const useDeleteUser = () => {
             client.setQueryData(['user'], [...temp]);
             NotificationManager.success(
                 'Xóa thành công',
-                'Xóa người dùng thành công',
+                'Xóa tài khoản thành công',
             );
         },
         onError: (error, variables, context) => {
             client.setQueryData(['user'], [...context]);
-            NotificationManager.error('Xóa lỗi', 'xóa người dùng lỗi');
+            NotificationManager.error('Xóa lỗi', 'xóa tài khoản lỗi');
         },
     });
 };
