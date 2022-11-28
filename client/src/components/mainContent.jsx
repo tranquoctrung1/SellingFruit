@@ -2,6 +2,7 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import Page404 from './404';
 import Billing from './billing';
 import Consumer from './consumer';
+import Permission from './permission';
 import Product from './product';
 import Provider from './provider';
 import Staff from './staff';
@@ -21,6 +22,7 @@ const MainContent = () => {
                 <Route exact path="/provider" element={<Provider />} />
                 <Route exact path="/staff" element={<Staff />} />
                 <Route exact path="/user" element={<User />} />
+                <Route exact path="/permission" element={<Permission />} />
                 <Route path="*" element={<Page404 />} />
             </Routes>
         </AnimatePresence>

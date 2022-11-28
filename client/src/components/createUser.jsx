@@ -24,7 +24,7 @@ import { useStaff } from '../hooks/staffHooks';
 
 import { Controller, useForm } from 'react-hook-form';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Swal from 'sweetalert2';
 
@@ -70,33 +70,6 @@ const CreateUser = () => {
         isError: isErrorStaff,
     } = useStaff();
 
-    if (isLoadingUser && isLoadingRole && isLoadingStaff) {
-        return (
-            <Grid>
-                <Col span={12}>
-                    <Center>
-                        <Loader color="red"></Loader>
-                    </Center>
-                </Col>
-            </Grid>
-        );
-    }
-
-    if (isErrorUser && isErrorRole && isErrorStaff) {
-        return (
-            <Grid>
-                <Col span={12}>
-                    <Center>
-                        <Text size="md" color="red" weight={500}>
-                            {errorUser.message} {errorRole.message}{' '}
-                            {errorStaff.message}
-                        </Text>
-                    </Center>
-                </Col>
-            </Grid>
-        );
-    }
-
     const listUsername = [];
 
     const setListUserName = () => {
@@ -131,9 +104,44 @@ const CreateUser = () => {
         }
     };
 
-    setListUserName();
-    setListRole();
-    setListStaffId();
+    useEffect(() => {
+        if (roles && roles.length > 0) {
+            setListRole();
+        }
+        if (users && users.length > 0) {
+            setListUserName();
+        }
+        if (staffs && staffs.length > 0) {
+            setListStaffId();
+        }
+    }, [users, roles, staffs]);
+
+    if (isLoadingUser && isLoadingRole && isLoadingStaff) {
+        return (
+            <Grid>
+                <Col span={12}>
+                    <Center>
+                        <Loader color="red"></Loader>
+                    </Center>
+                </Col>
+            </Grid>
+        );
+    }
+
+    if (isErrorUser && isErrorRole && isErrorStaff) {
+        return (
+            <Grid>
+                <Col span={12}>
+                    <Center>
+                        <Text size="md" color="red" weight={500}>
+                            {errorUser.message} {errorRole.message}{' '}
+                            {errorStaff.message}
+                        </Text>
+                    </Center>
+                </Col>
+            </Grid>
+        );
+    }
 
     const checkExistsUsername = (username, data) => {
         let findIndex = data.findIndex((el) => el.username === username);

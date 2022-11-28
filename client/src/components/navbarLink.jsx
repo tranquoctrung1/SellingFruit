@@ -2,6 +2,7 @@ import { Button, Col, Grid, Text, ThemeIcon } from '@mantine/core';
 import {
     IconApple,
     IconFileInfo,
+    IconLicense,
     IconTruckDelivery,
     IconUser,
     IconUserCheck,
@@ -202,6 +203,38 @@ const NavBarLink = () => {
                     >
                         <Text size="sx" weight={500}>
                             Người dùng
+                        </Text>
+                    </Button>
+                </Col>
+                <Col span={12}>
+                    <Button
+                        variant="subtle"
+                        fullWidth={true}
+                        component={Link}
+                        to="/permission"
+                        leftIcon={
+                            <ThemeIcon color="grape">
+                                <IconLicense />
+                            </ThemeIcon>
+                        }
+                        styles={(theme) => ({
+                            root: {
+                                border: 0,
+                                height: 42,
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                            },
+                            inner: {
+                                justifyContent: 'flex-start',
+                            },
+                            leftIcon: {
+                                marginRight: 10,
+                                opacity: 0.5,
+                            },
+                        })}
+                    >
+                        <Text size="sx" weight={500}>
+                            Phân Quyền
                         </Text>
                     </Button>
                 </Col>

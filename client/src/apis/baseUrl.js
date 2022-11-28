@@ -8,3 +8,4 @@ export const baseUrlForOrderDetail = `${baseUrl}/orderdetail`;
 export const baseUrlForRole = `${baseUrl}/role`;
 export const baseUrlForUser = `${baseUrl}/user`;
 export const baseUrlForStaff = `${baseUrl}/staff`;
+export const baseUrlForStaffConsumer = `${baseUrl}/staffconsumer`;

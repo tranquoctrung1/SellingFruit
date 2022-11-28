@@ -13,6 +13,7 @@ const OrderDetailRoute = require('./routers/orderdetail.router');
 const StaffRoute = require('./routers/staff.router');
 const UserRoute = require('./routers/user.router');
 const RoleRoute = require('./routers/role.router');
+const StaffConsumerRoute = require('./routers/staffConsumer.router');
 
 const cors = require('./middleware/cors');
 
@@ -37,6 +38,7 @@ app.use('/orderdetail', OrderDetailRoute);
 app.use('/user', UserRoute);
 app.use('/staff', StaffRoute);
 app.use('/role', RoleRoute);
+app.use('/staffconsumer', StaffConsumerRoute);
 
 app.get('/', (req, res) => {
     res.json({ username: 'tranquoctrung' });
