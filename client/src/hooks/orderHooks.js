@@ -22,7 +22,11 @@ export const useInsertOrder = () => {
             return prevOrderData;
         },
         onSuccess: (data, variables, context) => {
-            client.setQueryData(['order'], [...context, variables]);
+            if (DataView.length > 0) {
+                client.setQueryData(['order'], [...context, data[0]]);
+            } else {
+                client.setQueryData(['order'], [...context]);
+            }
             NotificationManager.success(
                 'Thêm thành công',
                 'Thêm đơn hàng thành công',

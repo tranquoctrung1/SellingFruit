@@ -100,7 +100,7 @@ const CreateBilling = () => {
         isError: isErrorConsumer,
     } = useConsumer();
 
-    if (isLoadingConsumer && isLoadingOrder) {
+    if (isLoadingConsumer || isLoadingOrder) {
         return (
             <Grid>
                 <Col span={12}>
@@ -184,7 +184,8 @@ const CreateBilling = () => {
 
     const ChangeModeClicked = () => {
         setIsInsert(!isInsert);
-        reset((formValue) => ({ ...formValue, orderId: '' }));
+        //reset((formValue) => ({ ...formValue, orderId: '' }));
+        reset();
     };
 
     const handleOnSubmit = (e) => {

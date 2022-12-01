@@ -104,19 +104,7 @@ const CreateUser = () => {
         }
     };
 
-    useEffect(() => {
-        if (roles && roles.length > 0) {
-            setListRole();
-        }
-        if (users && users.length > 0) {
-            setListUserName();
-        }
-        if (staffs && staffs.length > 0) {
-            setListStaffId();
-        }
-    }, [users, roles, staffs]);
-
-    if (isLoadingUser && isLoadingRole && isLoadingStaff) {
+    if (isLoadingUser || isLoadingRole || isLoadingStaff) {
         return (
             <Grid>
                 <Col span={12}>
@@ -142,6 +130,10 @@ const CreateUser = () => {
             </Grid>
         );
     }
+
+    setListRole();
+    setListUserName();
+    setListStaffId();
 
     const checkExistsUsername = (username, data) => {
         let findIndex = data.findIndex((el) => el.username === username);
