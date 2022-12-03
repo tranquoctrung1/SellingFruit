@@ -8,6 +8,14 @@ module.exports.getAll = async (req, res) => {
     }
 };
 
+module.exports.getBigestNumberOrder = async (req, res) => {
+    try {
+        res.status(200).json(await OrderModel.getBigestNumberOrder());
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+};
+
 module.exports.getOrderByOderId = async (req, res) => {
     try {
         let orderId = req.query.orderId;

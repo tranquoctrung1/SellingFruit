@@ -7,6 +7,8 @@ router.get('/getAll', OrderController.getAll);
 
 router.get('/getOrderByOderId', OrderController.getOrderByOderId);
 
+router.get('/getBigestNumberOrder', OrderController.getBigestNumberOrder);
+
 router.post('/insert', OrderController.Insert);
 
 router.patch('/update', OrderController.Update);

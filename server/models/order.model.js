@@ -1,5 +1,7 @@
 const ConnectDB = require('../db/connect');
 const mongo = require('mongodb');
+const TotalBillModel = require('./totalBill.model');
+const OrderDetailModel = require('./orderdetail.model');
 
 const OrderCollection = 'order';
 
@@ -45,6 +47,22 @@ module.exports.getAll = async () => {
     return result;
 };
 
+module.exports.getBigestNumberOrder = async () => {
+    let Connect = new ConnectDB.Connect();
+
+    let collection = await Connect.connect(OrderCollection);
+
+    let result = await collection
+        .find({})
+        .sort({ numberOrder: -1 })
+        .limit(1)
+        .toArray();
+
+    Connect.disconnect();
+
+    return result;
+};
+
 module.exports.getOrderByOrderId = async (orderId) => {
     let Connect = new ConnectDB.Connect();
 
@@ -62,24 +80,43 @@ module.exports.Insert = async (data) => {
 
     let collection = await Connect.connect(OrderCollection);
 
-    let check = await collection.find({ orderId: data.orderId }).toArray();
+    let bigestNumberOrder = await TotalBillModel.getTotalBill();
 
-    if (check.length <= 0) {
-        let temp = [];
-        temp.push(data);
+    let listOrderDetail = [...data.listOrderDetail];
 
-        let result = await collection.insertMany(temp);
+    delete data.listOrderDetail;
 
-        if (result.insertedCount >= 1) {
-            return await collection.find({ orderId: data.orderId }).toArray();
-        }
-
-        Connect.disconnect();
-
-        return result;
+    let total;
+    if (bigestNumberOrder.length > 0) {
+        data.numberOrder = bigestNumberOrder[0].total + 1;
+        total = data.numberOrder;
+    } else {
+        data.numberOrder = 1;
+        total = 1;
     }
 
-    return 0;
+    data.orderId = `${data.orderId}_${data.numberOrder}`;
+    data.dateCreated = new Date(data.dateCreated);
+    data.dateCreated.setHours(data.dateCreated.getHours() + 7);
+
+    for (let item of listOrderDetail) {
+        item.orderId = data.orderId;
+    }
+
+    let temp = [];
+    temp.push(data);
+
+    let result = await collection.insertMany(temp);
+
+    if (result.insertedCount >= 1) {
+        await TotalBillModel.Update(total);
+        await OrderDetailModel.Insert(listOrderDetail);
+        result = await collection.find({ orderId: data.orderId }).toArray();
+    }
+
+    Connect.disconnect();
+
+    return result;
 };
 
 module.exports.Update = async (data) => {
