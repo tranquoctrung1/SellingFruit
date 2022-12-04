@@ -9,6 +9,14 @@ export const getAll = async () => {
     return result.data;
 };
 
+export const getConsumerByStaffId = async (data) => {
+    let url = `${baseUrlForConsumer}/getConsumerByStaffId?role=${data.queryKey[1]}&staffId=${data.queryKey[2]}`;
+
+    let result = await axios.get(url);
+
+    return result.data;
+};
+
 export const Insert = async (consumer) => {
     let url = `${baseUrlForConsumer}/insert`;
 

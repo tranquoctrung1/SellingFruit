@@ -1,11 +1,23 @@
 import { useMutation, useQuery } from 'react-query';
-import { Delete, getAll, Insert, Update } from '../apis/consumer.api';
+import {
+    Delete,
+    getAll,
+    getConsumerByStaffId,
+    Insert,
+    Update,
+} from '../apis/consumer.api';
 
 import { NotificationManager } from 'react-notifications';
 import client from '../client/client';
 
 export const useConsumer = () =>
     useQuery(['consumer'], getAll, {
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+    });
+
+export const useConsumerByStaffId = (role, staffId) =>
+    useQuery(['consumer', role, staffId], getConsumerByStaffId, {
         refetchOnMount: false,
         refetchOnWindowFocus: false,
     });

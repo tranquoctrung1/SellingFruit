@@ -13,7 +13,7 @@ import {
 import { DatePicker } from '@mantine/dates';
 import { Controller, useForm } from 'react-hook-form';
 
-import { useConsumer } from '../hooks/consumerHooks';
+import { useConsumer, useConsumerByStaffId } from '../hooks/consumerHooks';
 import {
     useDeleteOrder,
     useInsertOrder,
@@ -38,6 +38,11 @@ import {
 } from '../apis/orderDetail.api';
 
 import Swal from 'sweetalert2';
+
+import jwt_decode from 'jwt-decode';
+import { Navigate } from 'react-router-dom';
+
+import { getBigestNumberOrder } from '../apis/order.api';
 
 const CreateBilling = () => {
     const [isInsert, setIsInsert] = useState(false);
@@ -98,7 +103,10 @@ const CreateBilling = () => {
         data: consumers,
         error: errorConsumer,
         isError: isErrorConsumer,
-    } = useConsumer();
+    } = useConsumerByStaffId(
+        jwt_decode(localStorage.getItem('token')).role,
+        jwt_decode(localStorage.getItem('token')).staffId,
+    );
 
     if (isLoadingConsumer || isLoadingOrder) {
         return (
@@ -140,6 +148,7 @@ const CreateBilling = () => {
     }
 
     let listConsumerName = [];
+
     if (consumers != null && consumers !== undefined) {
         if (consumers.length > 0) {
             for (let consumer of consumers) {
@@ -180,6 +189,8 @@ const CreateBilling = () => {
         setValue('consumerName', consumer.consumerName);
         setValue('address', consumer.address);
         setValue('phoneNumber', consumer.phoneNumber);
+
+        setSelectedOrderId(consumer.consumerId);
     };
 
     const ChangeModeClicked = () => {
@@ -192,30 +203,30 @@ const CreateBilling = () => {
         const formValue = getValues();
         let isAllowSubmit = true;
 
-        if (formValue.orderId === '') {
-            setErrorOrderId('Mã đơn hàng không được bỏ trống!!');
-            isAllowSubmit = false;
-        } else {
-            let findIndexOrderId = listOrderIds.indexOf(formValue.orderId);
+        // if (formValue.orderId === '') {
+        //     setErrorOrderId('Mã đơn hàng không được bỏ trống!!');
+        //     isAllowSubmit = false;
+        // } else {
+        //     let findIndexOrderId = listOrderIds.indexOf(formValue.orderId);
 
-            if (findIndexOrderId !== -1) {
-                setErrorOrderId('Mã đơn hàng đã tồn tại!!');
-                isAllowSubmit = false;
-            } else {
-                setErrorOrderId('');
-            }
-        }
-        if (formValue.numberOrder === '') {
-            setErrorNumberOrder('Số của đơn hàng không được trống!!');
-            isAllowSubmit = false;
-        } else {
-            if (/^\d+$/.test(formValue.numberOrder) == false) {
-                setErrorNumberOrder('Số của đơn hàng phải là số!!');
-                isAllowSubmit = false;
-            } else {
-                setErrorNumberOrder('');
-            }
-        }
+        //     if (findIndexOrderId !== -1) {
+        //         setErrorOrderId('Mã đơn hàng đã tồn tại!!');
+        //         isAllowSubmit = false;
+        //     } else {
+        //         setErrorOrderId('');
+        //     }
+        // }
+        // if (formValue.numberOrder === '') {
+        //     setErrorNumberOrder('Số của đơn hàng không được trống!!');
+        //     isAllowSubmit = false;
+        // } else {
+        //     if (/^\d+$/.test(formValue.numberOrder) == false) {
+        //         setErrorNumberOrder('Số của đơn hàng phải là số!!');
+        //         isAllowSubmit = false;
+        //     } else {
+        //         setErrorNumberOrder('');
+        //     }
+        // }
         if (formValue.consumerName === '') {
             setErrorConsumerName('Tên khách hàng không được trống!!');
             isAllowSubmit = false;
@@ -236,27 +247,42 @@ const CreateBilling = () => {
         }
 
         if (isAllowSubmit === true) {
-            formValue.dateCreated.setHours(
-                formValue.dateCreated.getHours() + 7,
-            );
-            useInsertOrderMutation.mutate(formValue);
-            let temp = [];
+            const token = localStorage.getItem('token');
 
-            for (let item of listOrderDetail) {
-                let obj = {};
-                obj.orderId = formValue.orderId;
-                obj.productId = item.productId;
-                obj.productName = item.productName;
-                obj.amount = item.amount;
-                obj.price = item.price;
-                obj.note = item.note;
+            if (!token) {
+                return <Navigate to="/login" />;
+            } else {
+                let decodeToken = jwt_decode(token);
 
-                temp.push(obj);
+                if (!decodeToken.username) {
+                    return <Navigate to="/login" />;
+                } else {
+                    formValue.orderId = `${decodeToken.username}`;
+                    formValue.username = decodeToken.username;
+                    formValue.staffId = decodeToken.staffId;
+                    formValue.staffName = decodeToken.staffName;
+                    let temp = [];
+
+                    for (let item of listOrderDetail) {
+                        let obj = {};
+                        obj.orderId = formValue.orderId;
+                        obj.productId = item.productId;
+                        obj.productName = item.productName;
+                        obj.amount = item.amount;
+                        obj.price = item.price;
+                        obj.note = item.note;
+
+                        temp.push(obj);
+                    }
+
+                    formValue.listOrderDetail = [...temp];
+
+                    useInsertOrderMutation.mutate(formValue);
+
+                    //insertOrderDetail(temp);
+                    //setCurrentOrder(formValue);
+                }
             }
-
-            insertOrderDetail(temp);
-
-            setCurrentOrder(formValue);
         }
     };
 
@@ -265,21 +291,21 @@ const CreateBilling = () => {
 
         let isAllowUpdate = true;
 
-        if (formValue.orderId === '') {
-            setErrorOrderId('Mã đơn hàng không được bỏ trống!!');
-            isAllowUpdate = false;
-        }
-        if (formValue.numberOrder === '') {
-            setErrorNumberOrder('Số của đơn hàng không được trống!!');
-            isAllowUpdate = false;
-        } else {
-            if (/^\d+$/.test(formValue.numberOrder) === false) {
-                setErrorNumberOrder('Số của đơn hàng phải là số!!');
-                isAllowUpdate = false;
-            } else {
-                setErrorNumberOrder('');
-            }
-        }
+        // if (formValue.orderId === '') {
+        //     setErrorOrderId('Mã đơn hàng không được bỏ trống!!');
+        //     isAllowUpdate = false;
+        // }
+        // if (formValue.numberOrder === '') {
+        //     setErrorNumberOrder('Số của đơn hàng không được trống!!');
+        //     isAllowUpdate = false;
+        // } else {
+        //     if (/^\d+$/.test(formValue.numberOrder) === false) {
+        //         setErrorNumberOrder('Số của đơn hàng phải là số!!');
+        //         isAllowUpdate = false;
+        //     } else {
+        //         setErrorNumberOrder('');
+        //     }
+        // }
         if (formValue.consumerName === '') {
             setErrorConsumerName('Tên khách hàng không được trống!!');
             isAllowUpdate = false;
@@ -358,8 +384,8 @@ const CreateBilling = () => {
             e.target.value !== undefined &&
             e.target.value !== ''
         ) {
-            setErrorOrderId('');
-            setSelectedOrderId(e.target.value);
+            //setErrorOrderId('');
+            //setSelectedOrderId(e.target.value);
         }
     };
 
@@ -369,7 +395,7 @@ const CreateBilling = () => {
             e.target.value !== undefined &&
             e.target.value !== ''
         ) {
-            setErrorNumberOrder('');
+            //setErrorNumberOrder('');
         }
     };
 
@@ -426,12 +452,13 @@ const CreateBilling = () => {
                                 control={control}
                                 render={({ field }) => (
                                     <Select
-                                        withAsterisk
+                                        //withAsterisk
                                         label="Mã đơn hàng"
                                         placeholder="Mã đơn hàng"
                                         searchable
                                         nothingFound="Không có đơn hàng"
                                         maxDropdownHeight={280}
+                                        disabled={true}
                                         data={listOrderIds}
                                         {...register('orderId', {
                                             onChange: handleOrderIdChange,
@@ -448,10 +475,11 @@ const CreateBilling = () => {
                                 control={control}
                                 render={({ field }) => (
                                     <TextInput
-                                        withAsterisk
+                                        //withAsterisk
                                         label="Mã đơn hàng"
                                         placeholder="Mã đơn hàng"
                                         error={errorOrderId}
+                                        disabled={true}
                                         {...register('orderId', {
                                             onBlur: onOrderIdBlur,
                                         })}
@@ -472,9 +500,10 @@ const CreateBilling = () => {
                             control={control}
                             render={({ field }) => (
                                 <TextInput
-                                    withAsterisk
+                                    // withAsterisk
                                     label="Số của đơn hàng"
                                     placeholder="Nhập số của đơn hàng"
+                                    disabled={true}
                                     error={errorNumberOrder}
                                     {...field}
                                     {...register('numberOrder', {

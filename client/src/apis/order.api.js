@@ -9,6 +9,12 @@ export const getAll = async () => {
     return result.data;
 };
 
+export const getBigestNumberOrder = () => {
+    let url = `${baseUrlForOrder}/getBigestNumberOrder`;
+
+    return axios.get(url);
+};
+
 export const Insert = async (order) => {
     let url = `${baseUrlForOrder}/Insert`;
 
