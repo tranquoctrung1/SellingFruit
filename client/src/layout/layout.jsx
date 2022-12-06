@@ -22,7 +22,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 function Layout() {
     const [colorScheme, setColorScheme] = useLocalStorage({
-        key: 'mantine-color-scheme',
+        key: 'mantine-color-scheme-selling-fruit',
         defaultValue: 'light',
         getInitialValueInEffect: true,
     });

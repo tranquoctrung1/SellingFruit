@@ -16,7 +16,7 @@ export const useInsertUser = () => {
             await client.cancelQueries('user');
 
             const prevUserData = client.getQueryData(['user']);
-            client.setQueryData(['user'], (prevData) => [...prevData]);
+            client.setQueryData(['user'], (prevUserData) => [...prevUserData]);
 
             return prevUserData;
         },
@@ -40,7 +40,7 @@ export const useUpdateUser = () => {
             await client.cancelQueries('user');
 
             const prevUserData = client.getQueryData(['user']);
-            client.setQueryData(['user'], (prevData) => [...prevData]);
+            client.setQueryData(['user'], (prevUserData) => [...prevUserData]);
 
             return prevUserData;
         },
@@ -71,7 +71,7 @@ export const useDeleteUser = () => {
             await client.cancelQueries('user');
 
             const prevUserData = client.getQueryData(['user']);
-            client.setQueryData(['user'], (prevData) => [...prevData]);
+            client.setQueryData(['user'], (prevUserData) => [...prevUserData]);
 
             return prevUserData;
         },

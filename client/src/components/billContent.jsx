@@ -81,7 +81,7 @@ const BillContent = () => {
                 orderDetail={listOrderDetail}
                 ref={componentRef}
             />
-            {/* {currentOrder.status === 1 ? (
+            {currentOrder.status === 1 ? (
                 <Grid style={{ marginTop: '10px' }}>
                     <Col span={12}>
                         <Center>
@@ -109,34 +109,21 @@ const BillContent = () => {
                         </Center>
                     </Col>
                 </Grid>
-            ) : null} */}
-            <Grid style={{ marginTop: '10px' }}>
-                <Col span={12}>
-                    <Center>
-                        {loading === true ? (
+            ) : (
+                <Grid style={{ marginTop: '10px' }}>
+                    <Col span={12}>
+                        <Center>
                             <Button
+                                color="violet"
                                 variant="filled"
-                                color={'violet'}
-                                onClick={handlePrint}
-                                leftIcon={<IconPrinter size={14} />}
-                                loading
-                                loaderPosition="right"
+                                style={{ pointerEvents: 'none' }}
                             >
-                                In hóa đơn bán lẻ
+                                Chờ phê duyệt
                             </Button>
-                        ) : (
-                            <Button
-                                variant="filled"
-                                color={'violet'}
-                                onClick={handlePrint}
-                                leftIcon={<IconPrinter size={14} />}
-                            >
-                                In hóa đơn bán lẻ
-                            </Button>
-                        )}
-                    </Center>
-                </Col>
-            </Grid>
+                        </Center>
+                    </Col>
+                </Grid>
+            )}
         </>
     );
 };

@@ -16,7 +16,9 @@ export const useInsertProvider = () => {
             await client.cancelQueries('provider');
 
             const prevProviderData = client.getQueryData(['provider']);
-            client.setQueryData(['provider'], (prevData) => [...prevData]);
+            client.setQueryData(['provider'], (prevProviderData) => [
+                ...prevProviderData,
+            ]);
 
             return prevProviderData;
         },
@@ -40,7 +42,9 @@ export const useUpdateProvider = () => {
             await client.cancelQueries('provider');
 
             const prevProviderData = client.getQueryData(['provider']);
-            client.setQueryData(['provider'], (prevData) => [...prevData]);
+            client.setQueryData(['provider'], (prevProviderData) => [
+                ...prevProviderData,
+            ]);
 
             return prevProviderData;
         },
@@ -74,7 +78,9 @@ export const useDeleteProvider = () => {
             await client.cancelQueries('provider');
 
             const prevProviderData = client.getQueryData(['provider']);
-            client.setQueryData(['provider'], (prevData) => [...prevData]);
+            client.setQueryData(['provider'], (prevProviderData) => [
+                ...prevProviderData,
+            ]);
 
             return prevProviderData;
         },

@@ -18,6 +18,7 @@ import {
     useDeleteOrder,
     useInsertOrder,
     useOrder,
+    useOrderByStaffId,
     useUpdateOrder,
 } from '../hooks/orderHooks';
 import CreateOrderDetail from './createOrderDetail';
@@ -26,7 +27,7 @@ import 'react-notifications/lib/notifications.css';
 
 import { NotificationContainer } from 'react-notifications';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useOrderGlobalState } from '../globalState/currentOrder.state';
 import { useOrderDetailGlobalState } from '../globalState/orderDetail.state';
@@ -89,8 +90,32 @@ const CreateBilling = () => {
             transpoter: '',
             status: 0,
             note: '',
+            username: '',
+            staffName: '',
+            staffId: '',
         },
     });
+
+    useEffect(() => {
+        let order = currentOrder;
+        if (order != null && order !== undefined) {
+            setValue('orderId', order.orderId);
+            setValue('numberOrder', order.numberOrder);
+            setValue('consumerId', order.consumerId);
+            setValue('consumerName', order.consumerName);
+            setValue('address', order.address);
+            setValue('phoneNumber', order.phoneNumber);
+            setValue('dateCreated', new Date(order.dateCreated));
+            setDateCreated(new Date(order.dateCreated));
+            setValue('totalPrice', order.totalPrice);
+            setValue('note', order.note);
+            setValue('username', order.username);
+            setValue('staffName', order.staffName);
+            setValue('staffId', order.staffId);
+
+            setSelectedOrderId(order.orderId);
+        }
+    }, [currentOrder]);
 
     const {
         isLoading: isLoadingOrder,
@@ -175,6 +200,12 @@ const CreateBilling = () => {
             setDateCreated(new Date(order.dateCreated));
             setValue('totalPrice', order.totalPrice);
             setValue('note', order.note);
+            setValue('username', order.username);
+            setValue('staffName', order.staffName);
+            setValue('staffId', order.staffId);
+            setValue('username', order.username);
+            setValue('staffName', order.staffName);
+            setValue('staffId', order.staffId);
 
             setSelectedOrderId(order.orderId);
 
@@ -257,6 +288,17 @@ const CreateBilling = () => {
                 if (!decodeToken.username) {
                     return <Navigate to="/login" />;
                 } else {
+                    let date = new Date(formValue.dateCreated);
+                    date = new Date(
+                        date.getFullYear(),
+                        date.getMonth(),
+                        date.getDate(),
+                        7,
+                        0,
+                        0,
+                    );
+                    formValue.dateCreated = date;
+
                     formValue.orderId = `${decodeToken.username}`;
                     formValue.username = decodeToken.username;
                     formValue.staffId = decodeToken.staffId;
@@ -326,9 +368,17 @@ const CreateBilling = () => {
         }
 
         if (isAllowUpdate === true) {
-            formValue.dateCreated.setHours(
-                formValue.dateCreated.getHours() + 7,
+            let date = new Date(formValue.dateCreated);
+            date = new Date(
+                date.getFullYear(),
+                date.getMonth(),
+                date.getDate(),
+                7,
+                0,
+                0,
             );
+            formValue.dateCreated = date;
+
             useUpdateOrderMutation.mutate(formValue);
 
             let temp = [];

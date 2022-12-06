@@ -16,7 +16,9 @@ export const useInsertStaff = () => {
             await client.cancelQueries('staff');
 
             const prevStaffData = client.getQueryData(['staff']);
-            client.setQueryData(['staff'], (prevData) => [...prevData]);
+            client.setQueryData(['staff'], (prevStaffData) => [
+                ...prevStaffData,
+            ]);
 
             return prevStaffData;
         },
@@ -40,7 +42,9 @@ export const useUpdateStaff = () => {
             await client.cancelQueries('staff');
 
             const prevRoleData = client.getQueryData(['staff']);
-            client.setQueryData(['staff'], (prevData) => [...prevData]);
+            client.setQueryData(['staff'], (prevStaffData) => [
+                ...prevStaffData,
+            ]);
 
             return prevRoleData;
         },
@@ -71,7 +75,9 @@ export const useDeleteStaff = () => {
             await client.cancelQueries('staff');
 
             const prevStaffData = client.getQueryData(['staff']);
-            client.setQueryData(['staff'], (prevData) => [...prevData]);
+            client.setQueryData(['staff'], (prevStaffData) => [
+                ...prevStaffData,
+            ]);
 
             return prevStaffData;
         },

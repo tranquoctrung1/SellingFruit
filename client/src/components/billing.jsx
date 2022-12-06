@@ -1,6 +1,7 @@
 import { Col, Grid } from '@mantine/core';
 import BillContent from './billContent';
 import CreateBilling from './createBilling';
+import ListOrder from './listOrder';
 
 import { motion } from 'framer-motion';
 
@@ -13,6 +14,8 @@ const Billing = () => {
         >
             <Grid>
                 <Col lg={6} md={12}>
+                    <ListOrder />
+
                     <CreateBilling />
                 </Col>
                 <Col lg={6} md={12}>

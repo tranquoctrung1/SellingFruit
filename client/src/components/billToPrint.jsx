@@ -197,9 +197,11 @@ export class ComponentToPrint extends React.PureComponent {
         return (
             <div className="relativeCSS">
                 <style type="text/css" media="print">
-                    {'\
+                    {
+                        '\
 				@page { size: ; }\
-			'}
+			'
+                    }
                 </style>
                 <Grid style={{ padding: '0 20px' }}>
                     <Col
@@ -473,7 +475,11 @@ export class ComponentToPrint extends React.PureComponent {
                             </Text>
                             <Space w="xs" />
                             <Text size="md" color="red" weight={500}>
-                                {order.numberOrder}
+                                {order.numberOrder !== undefined
+                                    ? order.numberOrder
+                                          .toString()
+                                          .padStart(6, '0')
+                                    : ''}
                             </Text>
                         </div>
                     </Col>

@@ -1,6 +1,12 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { Delete, getAll, Insert, Update } from '../apis/order.api';
+import {
+    Delete,
+    getAll,
+    getOrderByStaffId,
+    Insert,
+    Update,
+} from '../apis/order.api';
 
 import { NotificationManager } from 'react-notifications';
 import client from '../client/client';
@@ -11,13 +17,24 @@ export const useOrder = () =>
         refetchOnWindowFocus: false,
     });
 
+export const useOrderByStaffId = (role, staffId) =>
+    useQuery({
+        queryKey: ['order', role, staffId],
+        queryFn: () => getOrderByStaffId(role, staffId),
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+    });
+
 export const useInsertOrder = () => {
     return useMutation(Insert, {
         onMutate: async (res) => {
             await client.cancelQueries('order');
 
             const prevOrderData = client.getQueryData(['order']);
-            client.setQueryData(['order'], (prevData) => [...prevData]);
+
+            client.setQueryData(['order'], (prevOrderData) => [
+                ...prevOrderData,
+            ]);
 
             return prevOrderData;
         },
@@ -46,7 +63,9 @@ export const useUpdateOrder = () => {
             await client.cancelQueries('order');
 
             const prevOrderData = client.getQueryData(['order']);
-            client.setQueryData(['order'], (prevData) => [...prevData]);
+            client.setQueryData(['order'], (prevOrderData) => [
+                ...prevOrderData,
+            ]);
 
             return prevOrderData;
         },
@@ -76,8 +95,10 @@ export const useDeleteOrder = () => {
         onMutate: async (res) => {
             await client.cancelQueries('order');
 
-            const prevOrderData = client.getQueryData(['order']);
-            client.setQueryData(['order'], (prevData) => [...prevData]);
+            const prevOrderData = client.getQueryData('order');
+            client.setQueryData(['order'], (prevOrderData) => [
+                ...prevOrderData,
+            ]);
 
             return prevOrderData;
         },

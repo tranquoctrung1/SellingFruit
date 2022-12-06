@@ -9,6 +9,14 @@ export const getAll = async () => {
     return result.data;
 };
 
+export const getOrderByStaffId = async (role, staffId) => {
+    let url = `${baseUrlForOrder}/getOrderByStaffId?role=${role}&staffId=${staffId}`;
+
+    let result = await axios.get(url);
+
+    return result.data;
+};
+
 export const getBigestNumberOrder = () => {
     let url = `${baseUrlForOrder}/getBigestNumberOrder`;
 

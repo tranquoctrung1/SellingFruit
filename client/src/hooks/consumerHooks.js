@@ -28,7 +28,9 @@ export const useInsertConsumer = () => {
             await client.cancelQueries('consumer');
 
             const prevConsumerData = client.getQueryData(['consumer']);
-            client.setQueryData(['consumer'], (prevData) => [...prevData]);
+            client.setQueryData(['consumer'], (prevConsumerData) => [
+                ...prevConsumerData,
+            ]);
 
             return prevConsumerData;
         },
@@ -52,7 +54,9 @@ export const useUpdateConsumer = () => {
             await client.cancelQueries('consumer');
 
             const prevConsumerData = client.getQueryData(['consumer']);
-            client.setQueryData(['consumer'], (prevData) => [...prevData]);
+            client.setQueryData(['consumer'], (prevConsumerData) => [
+                ...prevConsumerData,
+            ]);
 
             return prevConsumerData;
         },
@@ -86,7 +90,9 @@ export const useDeleteConsumer = () => {
             await client.cancelQueries('consumer');
 
             const prevConsumerData = client.getQueryData(['consumer']);
-            client.setQueryData(['consumer'], (prevData) => [...prevData]);
+            client.setQueryData(['consumer'], (prevConsumerData) => [
+                ...prevConsumerData,
+            ]);
 
             return prevConsumerData;
         },

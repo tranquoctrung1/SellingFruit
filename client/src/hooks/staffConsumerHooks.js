@@ -18,7 +18,9 @@ export const useUpdateStaffConsumer = () => {
             const prevStaffConsumerData = client.getQueryData([
                 'staffconsumer',
             ]);
-            client.setQueryData(['staffconsumer'], (prevData) => [...prevData]);
+            client.setQueryData(['staffconsumer'], (prevStaffConsumerData) => [
+                ...prevStaffConsumerData,
+            ]);
 
             return prevStaffConsumerData;
         },

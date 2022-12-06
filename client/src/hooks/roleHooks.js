@@ -16,7 +16,7 @@ export const useInsertRole = () => {
             await client.cancelQueries('role');
 
             const prevRoleData = client.getQueryData(['role']);
-            client.setQueryData(['role'], (prevData) => [...prevData]);
+            client.setQueryData(['role'], (prevRoleData) => [...prevRoleData]);
 
             return prevRoleData;
         },
@@ -40,7 +40,7 @@ export const useUpdateRole = () => {
             await client.cancelQueries('role');
 
             const prevRoleData = client.getQueryData(['role']);
-            client.setQueryData(['role'], (prevData) => [...prevData]);
+            client.setQueryData(['role'], (prevRoleData) => [...prevRoleData]);
 
             return prevRoleData;
         },
@@ -71,7 +71,7 @@ export const useDeleteRole = () => {
             await client.cancelQueries('role');
 
             const prevRoleData = client.getQueryData(['role']);
-            client.setQueryData(['role'], (prevData) => [...prevData]);
+            client.setQueryData(['role'], (prevRoleData) => [...prevRoleData]);
 
             return prevRoleData;
         },

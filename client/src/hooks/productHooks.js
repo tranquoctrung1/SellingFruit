@@ -16,7 +16,9 @@ export const useInsertProduct = () => {
             await client.cancelQueries('product');
 
             const prevProductData = client.getQueryData(['product']);
-            client.setQueryData(['product'], (prevData) => [...prevData]);
+            client.setQueryData(['product'], (prevProductData) => [
+                ...prevProductData,
+            ]);
 
             return prevProductData;
         },
@@ -40,7 +42,9 @@ export const useUpdateProduct = () => {
             await client.cancelQueries('product');
 
             const prevProductData = client.getQueryData(['product']);
-            client.setQueryData(['product'], (prevData) => [...prevData]);
+            client.setQueryData(['product'], (prevProductData) => [
+                ...prevProductData,
+            ]);
 
             return prevProductData;
         },
@@ -71,7 +75,9 @@ export const useDeleteProduct = () => {
             await client.cancelQueries('product');
 
             const prevProductData = client.getQueryData(['product']);
-            client.setQueryData(['product'], (prevData) => [...prevData]);
+            client.setQueryData(['product'], (prevProductData) => [
+                ...prevProductData,
+            ]);
 
             return prevProductData;
         },
