@@ -6,6 +6,7 @@ import {
     getOrderByStaffId,
     Insert,
     Update,
+    UpdatePrintOrder,
 } from '../apis/order.api';
 
 import { NotificationManager } from 'react-notifications';
@@ -19,7 +20,7 @@ export const useOrder = () =>
 
 export const useOrderByStaffId = (role, staffId) =>
     useQuery({
-        queryKey: ['order', role, staffId],
+        queryKey: ['order', { role, staffId }],
         queryFn: () => getOrderByStaffId(role, staffId),
         refetchOnMount: false,
         refetchOnWindowFocus: false,
@@ -78,6 +79,40 @@ export const useUpdateOrder = () => {
                 }
             }
             client.setQueryData(['order'], [...temp]);
+            NotificationManager.success(
+                'Cập nhật thành công',
+                'Cập nhật đơn hàng thành công',
+            );
+        },
+        onError: (error, variables, context) => {
+            client.setQueryData(['order'], [...context]);
+            NotificationManager.error('Cập nhật lỗi', 'Cập nhật đơn hàng lỗi');
+        },
+    });
+};
+
+export const useUpdatePrintOrder = () => {
+    return useMutation(UpdatePrintOrder, {
+        onMutate: async (res) => {
+            await client.cancelQueries('order');
+
+            const prevOrderData = client.getQueryData(['order']);
+            client.setQueryData(['order'], (prevOrderData) => [
+                ...prevOrderData,
+            ]);
+
+            return prevOrderData;
+        },
+        onSuccess: (data, variables, context) => {
+            let temp = [...context];
+            for (let i = 0; i < temp.length; i++) {
+                if (temp[i].orderId === variables.orderId) {
+                    temp[i] = { ...variables };
+                    break;
+                }
+            }
+            client.setQueryData(['order'], [...temp]);
+            client.setQueryData(['currentOrder'], { ...variables });
             NotificationManager.success(
                 'Cập nhật thành công',
                 'Cập nhật đơn hàng thành công',

@@ -1,6 +1,5 @@
 import {
     ActionIcon,
-    Button,
     Center,
     Col,
     Grid,
@@ -34,7 +33,9 @@ import { NotificationContainer } from 'react-notifications';
 
 import Swal from 'sweetalert2';
 
-const ListOrder = () => {
+import { useNavigate } from 'react-router-dom';
+
+const OrderManagerment = () => {
     const [isFilterData, setIsFilterData] = useState(false);
     const [dataFilter, setFilterData] = useState([]);
 
@@ -46,6 +47,8 @@ const ListOrder = () => {
     const { isLoading, data: orders, error, isError } = useOrder();
 
     const useUpdatePrintOrderMutation = useUpdatePrintOrder();
+
+    const navigate = useNavigate();
 
     if (isLoading) {
         return (
@@ -80,6 +83,36 @@ const ListOrder = () => {
         return number.padStart(6, '0');
     };
 
+    const convertDateToString = (time) => {
+        if (
+            time !== null &&
+            time !== undefined &&
+            time.toString().trim() !== ''
+        ) {
+            let date = new Date(time);
+            let year = date.getFullYear();
+            let month =
+                date.getMonth() + 1 >= 10
+                    ? date.getMonth() + 1
+                    : `0${date.getMonth() + 1}`;
+            let day =
+                date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`;
+            let hours =
+                date.getHours() >= 10 ? date.getHours() : `0${date.getHours()}`;
+            let minute =
+                date.getMinutes() >= 10
+                    ? date.getMinutes()
+                    : `0${date.getMinutes()}`;
+            let second =
+                date.getSeconds() >= 10
+                    ? date.getSeconds()
+                    : `0${date.getSeconds()}`;
+
+            return `${day}/${month}/${year} ${hours}:${minute}:${second}`;
+        }
+        return '';
+    };
+
     const loadOrder = () => {
         if (orders.length > 0) {
             let columns = [
@@ -105,6 +138,20 @@ const ListOrder = () => {
                 {
                     name: 'Tên người tạo (tài khoản)',
                     selector: (row) => row.username,
+                    sortable: true,
+                    wrap: true,
+                },
+                {
+                    name: 'Ngày tạo đơn hàng',
+                    selector: (row) => row.dateCreated,
+                    format: (row) =>
+                        convertDateToString(new Date(row.dateCreated)),
+                    sortable: true,
+                    wrap: true,
+                },
+                {
+                    name: 'Ghi chú',
+                    selector: (row) => row.note,
                     sortable: true,
                     wrap: true,
                 },
@@ -196,6 +243,7 @@ const ListOrder = () => {
         let find = orders.find((el) => el.orderId === orderId);
         setCurrentOrder(find);
         localStorage.setItem('currentOrder', JSON.stringify(find));
+        navigate('/');
     };
 
     const onRequestPrintClicked = (orderId) => {
@@ -306,9 +354,9 @@ const ListOrder = () => {
                                 data={dataForTable}
                                 theme="dark"
                                 pagination
-                                paginationPerPage={5}
+                                paginationPerPage={30}
                                 paginationRowsPerPageOptions={[
-                                    5, 10, 50, 100, 200, 500,
+                                    30, 50, 100, 200, 500,
                                 ]}
                             />
                         ) : (
@@ -316,9 +364,9 @@ const ListOrder = () => {
                                 columns={column}
                                 data={dataForTable}
                                 pagination
-                                paginationPerPage={5}
+                                paginationPerPage={30}
                                 paginationRowsPerPageOptions={[
-                                    5, 10, 50, 100, 200, 500,
+                                    30, 50, 100, 200, 500,
                                 ]}
                             />
                         )
@@ -330,9 +378,9 @@ const ListOrder = () => {
                             data={dataFilter}
                             theme="dark"
                             pagination
-                            paginationPerPage={5}
+                            paginationPerPage={30}
                             paginationRowsPerPageOptions={[
-                                5, 10, 50, 100, 200, 500,
+                                30, 50, 100, 200, 500,
                             ]}
                         />
                     ) : (
@@ -340,9 +388,9 @@ const ListOrder = () => {
                             columns={column}
                             data={dataFilter}
                             pagination
-                            paginationPerPage={5}
+                            paginationPerPage={30}
                             paginationRowsPerPageOptions={[
-                                5, 10, 50, 100, 200, 500,
+                                30, 50, 100, 200, 500,
                             ]}
                         />
                     )}
@@ -352,4 +400,4 @@ const ListOrder = () => {
     );
 };
 
-export default ListOrder;
+export default OrderManagerment;

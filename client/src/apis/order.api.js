@@ -10,6 +10,7 @@ export const getAll = async () => {
 };
 
 export const getOrderByStaffId = async (role, staffId) => {
+    console.log(role, staffId);
     let url = `${baseUrlForOrder}/getOrderByStaffId?role=${role}&staffId=${staffId}`;
 
     let result = await axios.get(url);
@@ -33,6 +34,14 @@ export const Insert = async (order) => {
 
 export const Update = async (order) => {
     let url = `${baseUrlForOrder}/Update`;
+
+    let result = await axios.patch(url, order);
+
+    return result.data;
+};
+
+export const UpdatePrintOrder = async (order) => {
+    let url = `${baseUrlForOrder}/updatePrint`;
 
     let result = await axios.patch(url, order);
 

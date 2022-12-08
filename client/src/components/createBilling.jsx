@@ -93,6 +93,7 @@ const CreateBilling = () => {
             username: '',
             staffName: '',
             staffId: '',
+            allowPrint: 0,
         },
     });
 
@@ -112,6 +113,7 @@ const CreateBilling = () => {
             setValue('username', order.username);
             setValue('staffName', order.staffName);
             setValue('staffId', order.staffId);
+            setValue('allowPrint', order.allowPrint);
 
             setSelectedOrderId(order.orderId);
         }
@@ -206,7 +208,7 @@ const CreateBilling = () => {
             setValue('username', order.username);
             setValue('staffName', order.staffName);
             setValue('staffId', order.staffId);
-
+            setValue('allowPrint', order.allowPrint);
             setSelectedOrderId(order.orderId);
 
             setCurrentOrder(order);
@@ -725,13 +727,18 @@ const CreateBilling = () => {
                                     >
                                         Cập nhật
                                     </Button>
-                                    <Space w="md" />
-                                    <Button
-                                        onClick={handleOnDelete}
-                                        color="red"
-                                    >
-                                        Xóa
-                                    </Button>
+                                    {jwt_decode(localStorage.getItem('token'))
+                                        .role === 'admin' ? (
+                                        <>
+                                            <Space w="md" />
+                                            <Button
+                                                onClick={handleOnDelete}
+                                                color="red"
+                                            >
+                                                Xóa
+                                            </Button>
+                                        </>
+                                    ) : null}
                                 </>
                             ) : (
                                 <Button onClick={handleOnSubmit} color="green">

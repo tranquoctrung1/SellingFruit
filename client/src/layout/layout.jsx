@@ -1,4 +1,5 @@
 import {
+    ActionIcon,
     AppShell,
     Burger,
     ColorSchemeProvider,
@@ -7,10 +8,15 @@ import {
     MantineProvider,
     MediaQuery,
     Navbar,
+    Space,
     Text,
 } from '@mantine/core';
 import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 import { useState } from 'react';
+
+import { Navigate, useNavigate } from 'react-router-dom';
+
+import jwt_decode from 'jwt-decode';
 
 import IconChangeTheme from '../components/iconChangeTheme';
 import MainContent from '../components/mainContent';
@@ -18,7 +24,7 @@ import NavBarLink from '../components/navbarLink';
 
 import Logo from '../image/logo.png';
 
-import { BrowserRouter as Router } from 'react-router-dom';
+import { IconPower } from '@tabler/icons';
 
 function Layout() {
     const [colorScheme, setColorScheme] = useLocalStorage({
@@ -33,6 +39,30 @@ function Layout() {
     useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
     const [opened, setOpened] = useState(false);
+
+    const navigate = useNavigate();
+
+    const onLogoutClick = () => {
+        localStorage.removeItem('username');
+        localStorage.removeItem('role');
+        localStorage.removeItem('token');
+
+        navigate('/login');
+    };
+
+    const getUsername = () => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            return <Navigate to="/login" />;
+        } else {
+            const token = localStorage.getItem('token');
+
+            let decodeToken = jwt_decode(token);
+
+            return decodeToken.username;
+        }
+    };
 
     return (
         <ColorSchemeProvider
@@ -98,7 +128,27 @@ function Layout() {
                                     >
                                         Nhất Nam Food
                                     </Text>
-                                    <IconChangeTheme />
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                        }}
+                                    >
+                                        <Text color="white" size="sm">
+                                            {getUsername()}
+                                        </Text>
+                                        <Space w="md" />
+                                        <ActionIcon
+                                            color="teal"
+                                            variant="filled"
+                                            onClick={onLogoutClick}
+                                        >
+                                            <IconPower size={18} />
+                                        </ActionIcon>
+                                        <Space w="md" />
+                                        <IconChangeTheme />
+                                    </div>
                                 </div>
                             </Header>
                         }
