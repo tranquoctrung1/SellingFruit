@@ -24,6 +24,18 @@ module.exports.getAll = async () => {
     return result;
 };
 
+module.exports.getStaffByStaffId = async (staffId) => {
+    let Connect = new ConnectDB.Connect();
+
+    let collection = await Connect.connect(StaffCollection);
+
+    let result = await collection.find({ staffId: staffId }).toArray();
+
+    Connect.disconnect();
+
+    return result;
+};
+
 module.exports.Insert = async (data) => {
     let Connect = new ConnectDB.Connect();
 

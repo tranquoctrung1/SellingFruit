@@ -19,6 +19,10 @@ module.exports.Order = class Order {
         transpoter,
         status,
         note,
+        username,
+        staffId,
+        staffName,
+        allowPrint,
     ) {
         (this.orderId = orderId),
             (this.consumerId = consumerId),
@@ -32,6 +36,10 @@ module.exports.Order = class Order {
             (this.transpoter = transpoter),
             (this.status = status),
             (this.note = note);
+        this.username = username;
+        this.staffId = staffId;
+        this.staffName = staffName;
+        this.allowPrint = allowPrint;
     }
 };
 
@@ -69,6 +77,24 @@ module.exports.getOrderByOrderId = async (orderId) => {
     let collection = await Connect.connect(OrderCollection);
 
     let result = await collection.find({ orderId: orderId }).toArray();
+
+    Connect.disconnect();
+
+    return result;
+};
+
+module.exports.getOrderByStaffId = async (role, staffId) => {
+    let Connect = new ConnectDB.Connect();
+
+    let collection = await Connect.connect(OrderCollection);
+
+    let result = [];
+
+    if (role === 'admin') {
+        result = await collection.find({}).toArray();
+    } else {
+        result = await collection.find({ staffId: staffId }).toArray();
+    }
 
     Connect.disconnect();
 
@@ -139,6 +165,26 @@ module.exports.Update = async (data) => {
                 transpoter: data.transpoter,
                 status: data.status,
                 note: data.note,
+            },
+        },
+    );
+
+    Connect.disconnect();
+
+    return result;
+};
+
+module.exports.UpdatePrint = async (data) => {
+    let Connect = new ConnectDB.Connect();
+
+    let collection = await Connect.connect(OrderCollection);
+
+    const result = await collection.updateMany(
+        { orderId: data.orderId },
+        {
+            $set: {
+                allowPrint: data.allowPrint,
+                status: data.status,
             },
         },
     );

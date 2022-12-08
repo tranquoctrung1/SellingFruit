@@ -10,6 +10,8 @@ router.get(
     ConsumerController.getConsumerByConsumerId,
 );
 
+router.get('/getConsumerByStaffId', ConsumerController.getConsumerByStaffId);
+
 router.post('/insert', ConsumerController.Insert);
 
 router.patch('/update', ConsumerController.Update);

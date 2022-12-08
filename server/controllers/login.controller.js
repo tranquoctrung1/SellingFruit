@@ -1,4 +1,5 @@
 const UserModel = require('../models/user.model');
+const StaffModel = require('../models/staff.model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -12,15 +13,35 @@ module.exports.Login = async (req, res) => {
         if (result.length > 0) {
             let dbPassword = result[0].password;
             if (bcrypt.compareSync(password, dbPassword)) {
-                let token = jwt.sign(
-                    {
-                        username: result[0].username,
-                        userid: result[0]._id,
-                        role: result[0].role,
-                    },
-                    process.env.JWT_KEY,
-                    //{ expiresIn: "1h" }
+                let staff = await StaffModel.getStaffByStaffId(
+                    result[0].staffId,
                 );
+                let token;
+                if (staff.length > 0) {
+                    token = jwt.sign(
+                        {
+                            username: result[0].username,
+                            userid: result[0]._id,
+                            role: result[0].role,
+                            staffId: result[0].staffId,
+                            staffName: result[0].staffName,
+                        },
+                        process.env.JWT_KEY,
+                        //{ expiresIn: "1h" }
+                    );
+                } else {
+                    token = jwt.sign(
+                        {
+                            username: result[0].username,
+                            userid: result[0]._id,
+                            role: result[0].role,
+                            staffId: result[0].staffId,
+                            staffName: '',
+                        },
+                        process.env.JWT_KEY,
+                        //{ expiresIn: "1h" }
+                    );
+                }
 
                 res.status(200).json({
                     username: result[0].username,

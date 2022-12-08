@@ -20,6 +20,18 @@ module.exports.getConsumerByConsumerId = async (req, res) => {
     }
 };
 
+module.exports.getConsumerByStaffId = async (req, res) => {
+    try {
+        let { role, staffId } = req.query;
+
+        res.status(200).json(
+            await ConsumerModel.getConsumerByStaffId(role, staffId),
+        );
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+};
+
 module.exports.Insert = async (req, res) => {
     try {
         let data = req.body;

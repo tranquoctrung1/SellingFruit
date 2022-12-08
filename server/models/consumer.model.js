@@ -1,5 +1,6 @@
 const ConnectDB = require('../db/connect');
 const mongo = require('mongodb');
+const StaffConsumerModel = require('../models/staffConsumer.model');
 
 const ConsumerCollection = 'consumer';
 
@@ -29,6 +30,37 @@ module.exports.getAll = async () => {
     let collection = await Connect.connect(ConsumerCollection);
 
     let result = await collection.find({}).toArray();
+
+    Connect.disconnect();
+
+    return result;
+};
+
+module.exports.getConsumerByStaffId = async (role, staffId) => {
+    let Connect = new ConnectDB.Connect();
+
+    let collection = await Connect.connect(ConsumerCollection);
+
+    let result = [];
+
+    if (role === 'admin') {
+        result = await collection.find({}).toArray();
+    } else {
+        if (staffId != null && staffId != undefined && staffId != '') {
+            let temp = await StaffConsumerModel.getListConsumerByStaffId(
+                staffId,
+            );
+            if (temp.length > 0) {
+                if (temp[0].consumerId.length > 0) {
+                    result = await collection
+                        .find({
+                            consumerId: { $in: temp[0].consumerId },
+                        })
+                        .toArray();
+                }
+            }
+        }
+    }
 
     Connect.disconnect();
 

@@ -25,6 +25,15 @@ module.exports.getOrderByOderId = async (req, res) => {
         res.status(500).json(err.message);
     }
 };
+module.exports.getOrderByStaffId = async (req, res) => {
+    try {
+        let { role, staffId } = req.query;
+
+        res.status(200).json(await OrderModel.getOrderByStaffId(role, staffId));
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+};
 
 module.exports.Insert = async (req, res) => {
     try {
@@ -43,6 +52,18 @@ module.exports.Update = async (req, res) => {
         let data = req.body;
 
         let result = await OrderModel.Update(data);
+
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+};
+
+module.exports.UpdatePrint = async (req, res) => {
+    try {
+        let data = req.body;
+
+        let result = await OrderModel.UpdatePrint(data);
 
         res.status(200).json(result);
     } catch (err) {
