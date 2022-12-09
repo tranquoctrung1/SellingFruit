@@ -16,6 +16,8 @@ import { useOrderDetail } from '../hooks/orderDetailHooks';
 
 import UpdateProductForOrderDetail from './updateProductForOrderDetail';
 
+import jwt_decode from 'jwt-decode';
+
 const CreateOrderDetail = ({ orderId }) => {
     const { isLoading, data: products, error, isError } = useProduct();
 
@@ -94,6 +96,10 @@ const CreateOrderDetail = ({ orderId }) => {
         setListTempOrderDetail([...e]);
     };
 
+    const isAdmin = () => {
+        return jwt_decode(localStorage.getItem('token')).role === 'admin';
+    };
+
     const handleUpdateListProductClick = () => {
         const tempSelectedProduct = [];
         if (listTempOrderDetail.length > 0) {
@@ -105,6 +111,9 @@ const CreateOrderDetail = ({ orderId }) => {
                     );
                     if (findToCheckDuplicate === undefined) {
                         findItem.amount = 0;
+                        if (!isAdmin()) {
+                            findItem.price = 0;
+                        }
                         tempSelectedProduct.push(findItem);
                     }
                 }
@@ -116,7 +125,7 @@ const CreateOrderDetail = ({ orderId }) => {
     return (
         <>
             <Grid>
-                <Col span={9}>
+                <Col span={12}>
                     <MultiSelect
                         data={listProducts}
                         label="Chọn sản phẩm"
@@ -127,7 +136,7 @@ const CreateOrderDetail = ({ orderId }) => {
                     />
                 </Col>
                 <Col
-                    span={3}
+                    span={12}
                     style={{
                         display: 'flex',
                         justifyContent: 'center',
@@ -140,7 +149,7 @@ const CreateOrderDetail = ({ orderId }) => {
                         color="green"
                         onClick={handleUpdateListProductClick}
                     >
-                        Thêm SP
+                        Thêm số lượng sản phẩm
                     </Button>
                 </Col>
 

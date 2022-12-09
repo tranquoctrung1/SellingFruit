@@ -46,7 +46,7 @@ import { Navigate } from 'react-router-dom';
 import { getBigestNumberOrder } from '../apis/order.api';
 
 const CreateBilling = () => {
-    const [isInsert, setIsInsert] = useState(false);
+    const [isInsert, setIsInsert] = useState(true);
     const [selectedOrderId, setSelectedOrderId] = useState('');
     const [errorOrderId, setErrorOrderId] = useState('');
     const [errorNumberOrder, setErrorNumberOrder] = useState('');
@@ -88,34 +88,36 @@ const CreateBilling = () => {
             totalPrice: 0,
             receiver: '',
             transpoter: '',
-            status: 0,
+            status: 2,
             note: '',
             username: '',
             staffName: '',
             staffId: '',
-            allowPrint: 0,
+            allowPrint: 2,
         },
     });
 
     useEffect(() => {
-        let order = currentOrder;
-        if (order != null && order !== undefined) {
-            setValue('orderId', order.orderId);
-            setValue('numberOrder', order.numberOrder);
-            setValue('consumerId', order.consumerId);
-            setValue('consumerName', order.consumerName);
-            setValue('address', order.address);
-            setValue('phoneNumber', order.phoneNumber);
-            setValue('dateCreated', new Date(order.dateCreated));
-            setDateCreated(new Date(order.dateCreated));
-            setValue('totalPrice', order.totalPrice);
-            setValue('note', order.note);
-            setValue('username', order.username);
-            setValue('staffName', order.staffName);
-            setValue('staffId', order.staffId);
-            setValue('allowPrint', order.allowPrint);
+        if (Object.keys(currentOrder).length !== 0) {
+            let order = currentOrder;
+            if (order != null && order !== undefined) {
+                setValue('orderId', order.orderId);
+                setValue('numberOrder', order.numberOrder);
+                setValue('consumerId', order.consumerId);
+                setValue('consumerName', order.consumerName);
+                setValue('address', order.address);
+                setValue('phoneNumber', order.phoneNumber);
+                setValue('dateCreated', new Date(order.dateCreated));
+                setDateCreated(new Date(order.dateCreated));
+                setValue('totalPrice', order.totalPrice);
+                setValue('note', order.note);
+                setValue('username', order.username);
+                setValue('staffName', order.staffName);
+                setValue('staffId', order.staffId);
+                setValue('allowPrint', order.allowPrint);
 
-            setSelectedOrderId(order.orderId);
+                setSelectedOrderId(order.orderId);
+            }
         }
     }, [currentOrder]);
 
@@ -481,6 +483,10 @@ const CreateBilling = () => {
         }
     };
 
+    const isAdmin = () => {
+        return jwt_decode(localStorage.getItem('token')).role === 'admin';
+    };
+
     return (
         <div className="form-create-bill">
             <NotificationContainer />
@@ -659,6 +665,7 @@ const CreateBilling = () => {
                             control={control}
                             render={({ field }) => (
                                 <DatePicker
+                                    disabled={!isAdmin()}
                                     defaultValue={dateCreated}
                                     allowFreeInput
                                     placeholder="Ngày tạo đơn hàng"

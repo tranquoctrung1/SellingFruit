@@ -14,6 +14,8 @@ import { useOrderDetailGlobalState } from '../globalState/orderDetail.state';
 
 import { IconPencil, IconTrash } from '@tabler/icons';
 
+import jwt_decode from 'jwt-decode';
+
 const FormUpdateProductForOrderDetail = ({ product }) => {
     const [errorAmount, setErrorAmount] = useState('');
     const [errorPrice, setErrorPrice] = useState('');
@@ -22,6 +24,10 @@ const FormUpdateProductForOrderDetail = ({ product }) => {
         'listOrderDetail',
         [],
     );
+
+    const isAdmin = () => {
+        return jwt_decode(localStorage.getItem('token')).role === 'admin';
+    };
 
     const {
         control,
@@ -35,7 +41,7 @@ const FormUpdateProductForOrderDetail = ({ product }) => {
             productId: product.productId,
             productName: product.productName,
             amount: product.amount || 0,
-            price: product.price,
+            price: isAdmin() ? product.price : 0,
             note: product.note,
         },
     });
@@ -153,6 +159,7 @@ const FormUpdateProductForOrderDetail = ({ product }) => {
                         control={control}
                         render={({ field }) => (
                             <TextInput
+                                disabled={!isAdmin()}
                                 withAsterisk
                                 label="Đơn giá"
                                 placeholder="Đơn giá"

@@ -1,7 +1,6 @@
 import { useOrderDetailGlobalState } from '../globalState/orderDetail.state';
 
 import FormUpdateProductForOrderDetail from './formUpdateProductForOrderDetail';
-
 const UpdateProductForOrderDetail = () => {
     const [listOrderDetail, setListOrderDetail] = useOrderDetailGlobalState(
         'listOrderDetail',
