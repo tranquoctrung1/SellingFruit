@@ -10,7 +10,6 @@ export const getAll = async () => {
 };
 
 export const getOrderByStaffId = async (role, staffId) => {
-    console.log(role, staffId);
     let url = `${baseUrlForOrder}/getOrderByStaffId?role=${role}&staffId=${staffId}`;
 
     let result = await axios.get(url);

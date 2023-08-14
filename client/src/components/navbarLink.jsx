@@ -13,6 +13,8 @@ import { Link, Navigate } from 'react-router-dom';
 
 import jwt_decode from 'jwt-decode';
 
+import { useOpenSidebarState } from '../globalState/openSidebar.state';
+
 const NavBarLink = () => {
     const getRoleAdmin = () => {
         const token = localStorage.getItem('token');
@@ -27,6 +29,16 @@ const NavBarLink = () => {
             return decodeToken.role === 'admin';
         }
     };
+
+    const [openSidebar, setOpenSidebar] = useOpenSidebarState(
+        'openSidebar',
+        false,
+    );
+
+    const onChangedPageClicked = () => {
+        setOpenSidebar(!openSidebar);
+    };
+
     return (
         <div>
             <Grid align="center">
@@ -35,6 +47,7 @@ const NavBarLink = () => {
                         variant="subtle"
                         fullWidth={true}
                         component={Link}
+                        onClick={onChangedPageClicked}
                         to="/"
                         leftIcon={
                             <ThemeIcon color="grape">
@@ -67,6 +80,7 @@ const NavBarLink = () => {
                         variant="subtle"
                         fullWidth={true}
                         component={Link}
+                        onClick={onChangedPageClicked}
                         to="/ordermanager"
                         leftIcon={
                             <ThemeIcon color="grape">
@@ -101,6 +115,7 @@ const NavBarLink = () => {
                                 variant="subtle"
                                 fullWidth={true}
                                 component={Link}
+                                onClick={onChangedPageClicked}
                                 to="/consumer"
                                 leftIcon={
                                     <ThemeIcon color="grape">
@@ -133,6 +148,7 @@ const NavBarLink = () => {
                                 variant="subtle"
                                 fullWidth={true}
                                 component={Link}
+                                onClick={onChangedPageClicked}
                                 to="/product"
                                 leftIcon={
                                     <ThemeIcon color="grape">
@@ -165,6 +181,7 @@ const NavBarLink = () => {
                                 variant="subtle"
                                 fullWidth={true}
                                 component={Link}
+                                onClick={onChangedPageClicked}
                                 to="/provider"
                                 leftIcon={
                                     <ThemeIcon color="grape">
@@ -197,6 +214,7 @@ const NavBarLink = () => {
                                 variant="subtle"
                                 fullWidth={true}
                                 component={Link}
+                                onClick={onChangedPageClicked}
                                 to="/staff"
                                 leftIcon={
                                     <ThemeIcon color="grape">
@@ -229,6 +247,7 @@ const NavBarLink = () => {
                                 variant="subtle"
                                 fullWidth={true}
                                 component={Link}
+                                onClick={onChangedPageClicked}
                                 to="/user"
                                 leftIcon={
                                     <ThemeIcon color="grape">
@@ -261,6 +280,7 @@ const NavBarLink = () => {
                                 variant="subtle"
                                 fullWidth={true}
                                 component={Link}
+                                onClick={onChangedPageClicked}
                                 to="/permission"
                                 leftIcon={
                                     <ThemeIcon color="grape">

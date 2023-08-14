@@ -37,6 +37,7 @@ const CreateOrderDetail = ({ orderId }) => {
 
     useEffect(() => {
         let listProductDefaultValue = [];
+        console.log(orderDetail);
         if (orderDetail != null && orderDetail !== undefined) {
             if (orderDetail.length > 0) {
                 for (let item of orderDetail) {

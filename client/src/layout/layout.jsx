@@ -12,7 +12,6 @@ import {
     Text,
 } from '@mantine/core';
 import { useHotkeys, useLocalStorage } from '@mantine/hooks';
-import { useState } from 'react';
 
 import { Navigate, useNavigate } from 'react-router-dom';
 
@@ -23,6 +22,8 @@ import MainContent from '../components/mainContent';
 import NavBarLink from '../components/navbarLink';
 
 import Logo from '../image/logo.png';
+
+import { useOpenSidebarState } from '../globalState/openSidebar.state';
 
 import { IconPower } from '@tabler/icons';
 
@@ -38,7 +39,10 @@ function Layout() {
 
     useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
-    const [opened, setOpened] = useState(false);
+    const [openSidebar, setOpenSidebar] = useOpenSidebarState(
+        'openSidebar',
+        false,
+    );
 
     const navigate = useNavigate();
 
@@ -64,6 +68,10 @@ function Layout() {
         }
     };
 
+    const onOpenSidebarClicked = (e) => {
+        setOpenSidebar(!openSidebar);
+    };
+
     return (
         <ColorSchemeProvider
             colorScheme={colorScheme}
@@ -81,7 +89,7 @@ function Layout() {
                         navbar={
                             <Navbar
                                 hiddenBreakpoint="sm"
-                                hidden={!opened}
+                                hidden={!openSidebar}
                                 width={{ sm: 200, lg: 250 }}
                                 p="xs"
                             >
@@ -103,8 +111,8 @@ function Layout() {
                                         styles={{ display: 'none' }}
                                     >
                                         <Burger
-                                            opened={opened}
-                                            onClick={() => setOpened((o) => !o)}
+                                            opened={openSidebar}
+                                            onClick={onOpenSidebarClicked}
                                             size="sm"
                                             mr="xl"
                                         />

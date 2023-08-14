@@ -38,16 +38,24 @@ const BillContent = () => {
 
     const handleAfterPrint = useCallback(() => {
         console.log('`onAfterPrint` called');
-        const decodeToken = jwt_decode(localStorage.getItem('token'));
+        //const decodeToken = jwt_decode(localStorage.getItem('token'));
 
-        if (decodeToken.role !== 'admin') {
-            if (currentOrder != null && currentOrder !== undefined) {
-                let order = JSON.parse(localStorage.getItem('currentOrder'));
+        // if (decodeToken.role !== 'admin') {
+        //     if (currentOrder != null && currentOrder !== undefined) {
+        //         let order = JSON.parse(localStorage.getItem('currentOrder'));
 
-                order.allowPrint = 1;
-                order.status = 1;
-                useUpdatePrintOrderMutation.mutate(order);
-            }
+        //         order.allowPrint = 1;
+        //         order.status = 1;
+        //         useUpdatePrintOrderMutation.mutate(order);
+        //     }
+        // }
+
+        if (currentOrder != null && currentOrder !== undefined) {
+            let order = JSON.parse(localStorage.getItem('currentOrder'));
+
+            order.allowPrint = 1;
+            order.status = 1;
+            useUpdatePrintOrderMutation.mutate(order);
         }
     }, []);
 
@@ -106,7 +114,7 @@ const BillContent = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 if (currentOrder !== undefined && currentOrder !== null) {
-                    currentOrder.allowPrint = 2;
+                    currentOrder.allowPrint = 1;
                     currentOrder.status = 2;
 
                     useUpdatePrintOrderMutation.mutate(currentOrder);
@@ -151,35 +159,36 @@ const BillContent = () => {
                             </Center>
                         </Col>
                     </Grid>
-                ) : currentOrder.status === 0 ? (
-                    <Grid style={{ marginTop: '10px' }}>
-                        <Col span={12}>
-                            <Center>
-                                {loading === true ? (
-                                    <Button
-                                        variant="filled"
-                                        color={'violet'}
-                                        onClick={handlePrint}
-                                        leftIcon={<IconPrinter size={14} />}
-                                        loading
-                                        loaderPosition="right"
-                                    >
-                                        In hóa đơn bán lẻ
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        variant="filled"
-                                        color={'violet'}
-                                        onClick={handlePrint}
-                                        leftIcon={<IconPrinter size={14} />}
-                                    >
-                                        In hóa đơn bán lẻ
-                                    </Button>
-                                )}
-                            </Center>
-                        </Col>
-                    </Grid>
-                ) : currentOrder.status === 1 ? (
+                ) : //: currentOrder.status === 0 ? (
+                //     <Grid style={{ marginTop: '10px' }}>
+                //         <Col span={12}>
+                //             <Center>
+                //                 {loading === true ? (
+                //                     <Button
+                //                         variant="filled"
+                //                         color={'violet'}
+                //                         onClick={handlePrint}
+                //                         leftIcon={<IconPrinter size={14} />}
+                //                         loading
+                //                         loaderPosition="right"
+                //                     >
+                //                         In hóa đơn bán lẻ
+                //                     </Button>
+                //                 ) : (
+                //                     <Button
+                //                         variant="filled"
+                //                         color={'violet'}
+                //                         onClick={handlePrint}
+                //                         leftIcon={<IconPrinter size={14} />}
+                //                     >
+                //                         In hóa đơn bán lẻ
+                //                     </Button>
+                //                 )}
+                //             </Center>
+                //         </Col>
+                //     </Grid>
+                // )
+                currentOrder.status === 2 ? (
                     <Grid style={{ marginTop: '10px' }}>
                         <Col span={12}>
                             <Center>
@@ -188,26 +197,12 @@ const BillContent = () => {
                                     variant="filled"
                                     onClick={onRequestPrintOrderClicked}
                                 >
-                                    Yêu cầu in hóa đơn
+                                    Yêu cầu in lại hóa đơn
                                 </Button>
                             </Center>
                         </Col>
                     </Grid>
-                ) : (
-                    <Grid style={{ marginTop: '10px' }}>
-                        <Col span={12}>
-                            <Center>
-                                <Button
-                                    color="violet"
-                                    variant="filled"
-                                    style={{ pointerEvents: 'none' }}
-                                >
-                                    Đang phê duyệt
-                                </Button>
-                            </Center>
-                        </Col>
-                    </Grid>
-                )
+                ) : null
             ) : null}
         </>
     );

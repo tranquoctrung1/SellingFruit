@@ -88,7 +88,7 @@ const CreateBilling = () => {
             totalPrice: 0,
             receiver: '',
             transpoter: '',
-            status: 2,
+            status: 0,
             note: '',
             username: '',
             staffName: '',
@@ -117,6 +117,8 @@ const CreateBilling = () => {
                 setValue('allowPrint', order.allowPrint);
 
                 setSelectedOrderId(order.orderId);
+
+                setIsInsert(false);
             }
         }
     }, [currentOrder]);
@@ -301,6 +303,7 @@ const CreateBilling = () => {
                         0,
                         0,
                     );
+
                     formValue.dateCreated = date;
 
                     formValue.orderId = `${decodeToken.username}`;
@@ -720,7 +723,7 @@ const CreateBilling = () => {
                     selectedOrderId != null &&
                     selectedOrderId !== undefined ? (
                         <Col span={12}>
-                            <CreateOrderDetail orderId={getValues().orderId} />
+                            <CreateOrderDetail orderId={selectedOrderId} />
                         </Col>
                     ) : null}
 

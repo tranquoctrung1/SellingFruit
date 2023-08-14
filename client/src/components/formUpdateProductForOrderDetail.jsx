@@ -7,7 +7,7 @@ import {
     Text,
     TextInput,
 } from '@mantine/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { useOrderDetailGlobalState } from '../globalState/orderDetail.state';
@@ -45,6 +45,14 @@ const FormUpdateProductForOrderDetail = ({ product }) => {
             note: product.note,
         },
     });
+
+    useEffect(() => {
+        setValue('productId', product.productId);
+        setValue('productName', product.productName);
+        setValue('amount', product.amount || 0);
+        setValue('price', isAdmin() ? product.price : 0);
+        setValue('note', product.note);
+    }, [product]);
 
     const onAmoutdBlur = (e) => {
         if (

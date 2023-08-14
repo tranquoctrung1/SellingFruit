@@ -156,6 +156,31 @@ const OrderManagerment = () => {
                     wrap: true,
                 },
                 {
+                    name: 'Trạng thái',
+                    wrap: true,
+                    sortable: true,
+                    cell: (row) => (
+                        <>
+                            {jwt_decode(localStorage.getItem('token')).role ===
+                            'admin' ? (
+                                row.status === 0 ? (
+                                    <Text>Hóa đơn yêu cầu in</Text>
+                                ) : row.status === 1 ? (
+                                    <Text>Hóa đơn đã in </Text>
+                                ) : (
+                                    <Text>Hóa đơn yêu cầu in lại</Text>
+                                )
+                            ) : row.status === 0 ? (
+                                <Text>Đang yêu cầu in hóa đơn</Text>
+                            ) : row.status === 1 ? (
+                                <Text>Được yêu cầu in lại hóa đơn</Text>
+                            ) : (
+                                <Text>Đang yêu cầu in lại hóa đơn</Text>
+                            )}
+                        </>
+                    ),
+                },
+                {
                     name: '#',
                     button: true,
                     wrap: true,
@@ -186,22 +211,23 @@ const OrderManagerment = () => {
                                         </ActionIcon>
                                     </>
                                 ) : null
-                            ) : row.status === 2 ? (
-                                <>
-                                    <Space w="xs" />
-                                    <ActionIcon
-                                        color="violet"
-                                        variant="filled"
-                                        onClick={() =>
-                                            onAllowPrintOrderClicked(
-                                                row.orderId,
-                                            )
-                                        }
-                                    >
-                                        <IconRotate360 size={15} />
-                                    </ActionIcon>
-                                </>
-                            ) : null}
+                            ) : // : row.status === 2 ? (
+                            //     <>
+                            //         <Space w="xs" />
+                            //         <ActionIcon
+                            //             color="violet"
+                            //             variant="filled"
+                            //             onClick={() =>
+                            //                 onAllowPrintOrderClicked(
+                            //                     row.orderId,
+                            //                 )
+                            //             }
+                            //         >
+                            //             <IconRotate360 size={15} />
+                            //         </ActionIcon>
+                            //     </>
+                            // )
+                            null}
                         </>
                     ),
                 },
@@ -260,7 +286,7 @@ const OrderManagerment = () => {
             if (result.isConfirmed) {
                 let find = orders.find((el) => el.orderId === orderId);
 
-                find.allowPrint = 2;
+                find.allowPrint = 1;
                 find.status = 2;
 
                 useUpdatePrintOrderMutation.mutate(find);
@@ -282,8 +308,8 @@ const OrderManagerment = () => {
             if (result.isConfirmed) {
                 let find = orders.find((el) => el.orderId === orderId);
 
-                find.allowPrint = 0;
-                find.status = 0;
+                find.allowPrint = 1;
+                find.status = 2;
 
                 useUpdatePrintOrderMutation.mutate(find);
             }
