@@ -10,3 +10,5 @@ export const baseUrlForUser = `${baseUrl}/user`;
 export const baseUrlForStaff = `${baseUrl}/staff`;
 export const baseUrlForStaffConsumer = `${baseUrl}/staffconsumer`;
 export const baseUrlForLogin = `${baseUrl}/login`;
+export const baseUrlForStaffManager = `${baseUrl}/staffmanager`;
+export const baseUrlForManageStaff = `${baseUrl}/managestaff`;

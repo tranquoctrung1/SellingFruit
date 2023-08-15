@@ -16,6 +16,8 @@ const RoleRoute = require('./routers/role.router');
 const StaffConsumerRoute = require('./routers/staffConsumer.router');
 const LoginRoute = require('./routers/login.router');
 const TotalBillRoute = require('./routers/totalBill.router');
+const StaffManagerRoute = require('./routers/staffManager.router');
+const ManageStaffRoute = require('./routers/manageStaff.router');
 
 const cors = require('./middleware/cors');
 
@@ -43,6 +45,8 @@ app.use('/role', RoleRoute);
 app.use('/staffconsumer', StaffConsumerRoute);
 app.use('/login', LoginRoute);
 app.use('/totalbill', TotalBillRoute);
+app.use('/staffmanager', StaffManagerRoute);
+app.use('/managestaff', ManageStaffRoute);
 
 app.get('/', (req, res) => {
     res.json({ username: 'tranquoctrung' });

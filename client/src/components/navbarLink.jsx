@@ -2,12 +2,14 @@ import { Button, Col, Grid, Text, ThemeIcon } from '@mantine/core';
 import {
     IconApple,
     IconChecklist,
+    IconFileCertificate,
     IconFileInfo,
     IconLicense,
     IconTruckDelivery,
     IconUser,
     IconUserCheck,
     IconUserPlus,
+    IconUsers,
 } from '@tabler/icons';
 import { Link, Navigate } from 'react-router-dom';
 
@@ -248,10 +250,43 @@ const NavBarLink = () => {
                                 fullWidth={true}
                                 component={Link}
                                 onClick={onChangedPageClicked}
+                                to="/staffManager"
+                                leftIcon={
+                                    <ThemeIcon color="grape">
+                                        <IconUserCheck />
+                                    </ThemeIcon>
+                                }
+                                styles={(theme) => ({
+                                    root: {
+                                        border: 0,
+                                        height: 42,
+                                        justifyContent: 'flex-start',
+                                        alignItems: 'center',
+                                    },
+                                    inner: {
+                                        justifyContent: 'flex-start',
+                                    },
+                                    leftIcon: {
+                                        marginRight: 10,
+                                        opacity: 0.5,
+                                    },
+                                })}
+                            >
+                                <Text size="sx" weight={500}>
+                                    Nhân viên quản lý
+                                </Text>
+                            </Button>
+                        </Col>
+                        <Col span={12}>
+                            <Button
+                                variant="subtle"
+                                fullWidth={true}
+                                component={Link}
+                                onClick={onChangedPageClicked}
                                 to="/user"
                                 leftIcon={
                                     <ThemeIcon color="grape">
-                                        <IconUserPlus />
+                                        <IconUsers />
                                     </ThemeIcon>
                                 }
                                 styles={(theme) => ({
@@ -304,7 +339,40 @@ const NavBarLink = () => {
                                 })}
                             >
                                 <Text size="sx" weight={500}>
-                                    Phân Quyền
+                                    Phân Quyền nhân viên
+                                </Text>
+                            </Button>
+                        </Col>
+                        <Col span={12}>
+                            <Button
+                                variant="subtle"
+                                fullWidth={true}
+                                component={Link}
+                                onClick={onChangedPageClicked}
+                                to="/permissionStaffManager"
+                                leftIcon={
+                                    <ThemeIcon color="grape">
+                                        <IconFileCertificate />
+                                    </ThemeIcon>
+                                }
+                                styles={(theme) => ({
+                                    root: {
+                                        border: 0,
+                                        height: 42,
+                                        justifyContent: 'flex-start',
+                                        alignItems: 'center',
+                                    },
+                                    inner: {
+                                        justifyContent: 'flex-start',
+                                    },
+                                    leftIcon: {
+                                        marginRight: 10,
+                                        opacity: 0.5,
+                                    },
+                                })}
+                            >
+                                <Text size="sx" weight={500}>
+                                    Phân Quyền nv quản lý
                                 </Text>
                             </Button>
                         </Col>

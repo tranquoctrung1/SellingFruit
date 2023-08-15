@@ -1,13 +1,13 @@
 import {
-    ActionIcon,
-    Center,
-    Col,
-    Grid,
-    Kbd,
-    Loader,
-    Space,
-    Text,
-    TextInput,
+	ActionIcon,
+	Center,
+	Col,
+	Grid,
+	Kbd,
+	Loader,
+	Space,
+	Text,
+	TextInput,
 } from '@mantine/core';
 
 import DataTable, { createTheme } from 'react-data-table-component';
@@ -17,10 +17,10 @@ import { useOrder, useUpdatePrintOrder } from '../hooks/orderHooks';
 import jwt_decode from 'jwt-decode';
 
 import {
-    IconEdit,
-    IconPrinterOff,
-    IconRotate360,
-    IconSearch,
+	IconEdit,
+	IconPrinterOff,
+	IconRotate360,
+	IconSearch,
 } from '@tabler/icons';
 
 import { useOrderGlobalState } from '../globalState/currentOrder.state';
@@ -82,7 +82,6 @@ const OrderManagerment = () => {
     let dataForTable = [];
 
     const loadOrder = () => {
-        console.log(orders);
         if (orders.length > 0) {
             let columns = [
                 {

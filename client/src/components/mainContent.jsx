@@ -4,11 +4,13 @@ import RoleAdminRouter from '../routers/roleAdmin.router';
 import Page404 from './404';
 import Billing from './billing';
 import Consumer from './consumer';
+import ManageStaff from './manageStaff';
 import OrderManagerment from './orderManagerment';
 import Permission from './permission';
 import Product from './product';
 import Provider from './provider';
 import Staff from './staff';
+import StaffManager from './staffManager';
 import User from './user';
 
 import { AnimatePresence } from 'framer-motion';
@@ -101,6 +103,15 @@ const MainContent = () => {
                         />
                         <Route
                             exact
+                            path="/staffManager"
+                            element={
+                                <RoleAdminRouter>
+                                    <StaffManager />
+                                </RoleAdminRouter>
+                            }
+                        />
+                        <Route
+                            exact
                             path="/user"
                             element={
                                 <RoleAdminRouter>
@@ -112,6 +123,11 @@ const MainContent = () => {
                             exact
                             path="/permission"
                             element={<Permission />}
+                        />
+                        <Route
+                            exact
+                            path="/permissionStaffManager"
+                            element={<ManageStaff />}
                         />
                     </>
                 ) : null}

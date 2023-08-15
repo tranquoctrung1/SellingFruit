@@ -8,40 +8,42 @@ import {
     Loader,
     MultiSelect,
     Select,
-    Space,
     Text,
 } from '@mantine/core';
 
 import { Controller, useForm } from 'react-hook-form';
 
 import {
-    useStaffConsumer,
-    useUpdateStaffConsumer,
-} from '../hooks/staffConsumerHooks';
+    useManageStaff,
+    useUpdateManageStaff,
+} from '../hooks/manageStaffHooks';
 
-import { useConsumer } from '../hooks/consumerHooks';
 import { useStaff } from '../hooks/staffHooks';
+import {
+    useStaffManager,
+    useUpdateStaffManager,
+} from '../hooks/staffManagerHooks';
 
 import Swal from 'sweetalert2';
 
 import { NotificationContainer } from 'react-notifications';
 
-const StaffConsumerPermission = () => {
-    const [errorStaffId, setErrorStaffId] = useState('');
+const CreateManageStaff = () => {
+    const [errorStaffManagerId, setErrorStaffManagerId] = useState('');
 
     const { control, getValues, reset, setValue, register } = useForm({
         defaultValues: {
-            staffId: '',
-            consumerId: [],
+            staffManagerId: '',
+            staffId: [],
         },
     });
 
     const {
-        isLoading: isLoadingStaffConsumer,
-        data: staffConsumers,
-        error: errorStaffConsumer,
-        isError: isErrorStaffConsumer,
-    } = useStaffConsumer();
+        isLoading: isLoadingManageStaff,
+        data: manageStaffs,
+        error: errorManageStaff,
+        isError: isErrorManageStaff,
+    } = useManageStaff();
 
     const {
         isLoading: isLoadingStaff,
@@ -51,13 +53,13 @@ const StaffConsumerPermission = () => {
     } = useStaff();
 
     const {
-        isLoading: isLoadingConsumer,
-        data: consumers,
-        error: errorConsumer,
-        isError: isErrorConsumer,
-    } = useConsumer();
+        isLoading: isLoadingStaffManager,
+        data: staffManagers,
+        error: errorStaffManager,
+        isError: isErrorStaffManager,
+    } = useStaffManager();
 
-    const useUpdateStaffConsumerMutation = useUpdateStaffConsumer();
+    const useUpdateManageStaffMutation = useUpdateManageStaff();
 
     const listStaffId = [];
 
@@ -73,30 +75,30 @@ const StaffConsumerPermission = () => {
         }
     };
 
-    const listConsumerId = [];
+    const listStaffManagerId = [];
 
-    const setListConsumerId = () => {
-        for (let consumer of consumers) {
-            let findIndex = consumers.indexOf(
-                (el) => el.consumerId === consumer.consumerId,
+    const setListStaffManagerId = () => {
+        for (let staffManager of staffManagers) {
+            let findIndex = staffManagers.indexOf(
+                (el) => el.staffManagerId === staffManager.staffManagerId,
             );
 
             if (findIndex === -1) {
-                listConsumerId.push(consumer.consumerId);
+                listStaffManagerId.push(staffManager.staffManagerId);
             }
         }
     };
 
     useEffect(() => {
+        if (staffManagers && staffManagers.length > 0) {
+            setListStaffManagerId();
+        }
         if (staffs && staffs.length > 0) {
             setListStaffId();
         }
-        if (consumers && consumers.length > 0) {
-            setListConsumerId();
-        }
-    }, [staffConsumers, staffs, consumers]);
+    }, [staffManagers, staffs, manageStaffs]);
 
-    if (isLoadingStaffConsumer && isLoadingStaff && isLoadingConsumer) {
+    if (isLoadingManageStaff && isLoadingStaff && isLoadingStaffManager) {
         return (
             <Grid>
                 <Col span={12}>
@@ -108,14 +110,14 @@ const StaffConsumerPermission = () => {
         );
     }
 
-    if (isErrorStaffConsumer && isErrorStaff && isErrorConsumer) {
+    if (isErrorManageStaff && isErrorStaff && isErrorStaffManager) {
         return (
             <Grid>
                 <Col span={12}>
                     <Center>
                         <Text size="md" color="red" weight={500}>
-                            {errorStaffConsumer.message} {errorStaff.message}{' '}
-                            {errorConsumer.message}
+                            {errorManageStaff.message} {errorStaff.message}{' '}
+                            {errorStaffManager.message}
                         </Text>
                     </Center>
                 </Col>
@@ -123,30 +125,32 @@ const StaffConsumerPermission = () => {
         );
     }
 
-    const onStaffIdChanged = (e) => {
-        let find = staffConsumers.find((el) => el.staffId === e.target.value);
+    const onStaffManagerIdChanged = (e) => {
+        let find = manageStaffs.find(
+            (el) => el.staffManagerId === e.target.value,
+        );
 
         if (find !== undefined) {
-            setValue('consumerId', find.consumerId);
+            setValue('staffId', find.staffId);
         } else {
-            setValue('consumerId', []);
+            setValue('staffId', []);
         }
     };
 
-    const onUpdateStaffConsumerClicked = () => {
+    const onUpdateManageStaffClicked = () => {
         const formValue = getValues();
 
         let isAllow = true;
 
         if (
-            formValue.staffId === null ||
-            formValue.staffId === undefined ||
-            formValue.staffId === ''
+            formValue.staffManagerId === null ||
+            formValue.staffManagerId === undefined ||
+            formValue.staffManagerId === ''
         ) {
-            setErrorStaffId('Mã nhân viên không được trống!!!');
+            setErrorStaffManagerId('Mã nhân viên quản lý không được trống!!!');
             isAllow = false;
         } else {
-            setErrorStaffId('');
+            setErrorStaffManagerId('');
         }
 
         if (isAllow === true) {
@@ -161,7 +165,7 @@ const StaffConsumerPermission = () => {
                 cancelButtonText: 'Hủy',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    useUpdateStaffConsumerMutation.mutate(formValue);
+                    useUpdateManageStaffMutation.mutate(formValue);
                 }
             });
         }
@@ -190,36 +194,36 @@ const StaffConsumerPermission = () => {
                         </Col>
                         <Col sm={12} md={6}>
                             <Controller
-                                name="staffId"
+                                name="staffManagerId"
                                 control={control}
                                 render={({ field }) => (
                                     <Select
-                                        label="Mã nhân viên"
-                                        placeholder="staffId"
+                                        label="Mã nhân viên quản lý"
+                                        placeholder="staffManagerId"
                                         searchable
-                                        nothingFound="Không có mã nhân viên"
-                                        data={listStaffId}
+                                        nothingFound="Không có mã nhân viên quản lý"
+                                        data={listStaffManagerId}
                                         withAsterisk
-                                        {...register('staffId', {
-                                            onChange: onStaffIdChanged,
+                                        {...register('staffManagerId', {
+                                            onChange: onStaffManagerIdChanged,
                                         })}
                                         {...field}
-                                        error={errorStaffId}
+                                        error={errorStaffManagerId}
                                     />
                                 )}
                             ></Controller>
                         </Col>
                         <Col sm={12} md={6}>
                             <Controller
-                                name="consumerId"
+                                name="staffId"
                                 control={control}
                                 render={({ field }) => (
                                     <MultiSelect
-                                        label="Mã khách hàng"
-                                        placeholder="consumerId"
+                                        label="Mã nhân viên"
+                                        placeholder="staffId"
                                         searchable
-                                        nothingFound="Không có mã khách hàng"
-                                        data={listConsumerId}
+                                        nothingFound="Không có mã nhân viên"
+                                        data={listStaffId}
                                         clearButtonLabel="Clear selection"
                                         clearable
                                         {...field}
@@ -232,7 +236,7 @@ const StaffConsumerPermission = () => {
                                 <Button
                                     variant="filled"
                                     color="green"
-                                    onClick={onUpdateStaffConsumerClicked}
+                                    onClick={onUpdateManageStaffClicked}
                                 >
                                     Cập nhật
                                 </Button>
@@ -245,4 +249,4 @@ const StaffConsumerPermission = () => {
     );
 };
 
-export default StaffConsumerPermission;
+export default CreateManageStaff;
