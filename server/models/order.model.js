@@ -23,23 +23,25 @@ module.exports.Order = class Order {
         staffId,
         staffName,
         allowPrint,
+        dateTimeCreatedOrder,
     ) {
-        (this.orderId = orderId),
-            (this.consumerId = consumerId),
-            (this.consumerName = consumerName),
-            (this.address = address),
-            (this.phoneNumber = phoneNumber),
-            (this.numberOrder = numberOrder),
-            (this.dateCreated = dateCreated),
-            (this.totalPrice = totalPrice),
-            (this.receiver = receiver),
-            (this.transpoter = transpoter),
-            (this.status = status),
-            (this.note = note);
+        this.orderId = orderId;
+        this.consumerId = consumerId;
+        this.consumerName = consumerName;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.numberOrder = numberOrder;
+        this.dateCreated = dateCreated;
+        this.totalPrice = totalPrice;
+        this.receiver = receiver;
+        this.transpoter = transpoter;
+        this.status = status;
+        this.note = note;
         this.username = username;
         this.staffId = staffId;
         this.staffName = staffName;
         this.allowPrint = allowPrint;
+        this.dateTimeCreatedOrder = dateTimeCreatedOrder;
     }
 };
 
@@ -48,7 +50,10 @@ module.exports.getAll = async () => {
 
     let collection = await Connect.connect(OrderCollection);
 
-    let result = await collection.find({}).toArray();
+    let result = await collection
+        .find({})
+        .sort({ dateTimeCreatedOrder: -1 })
+        .toArray();
 
     Connect.disconnect();
 
@@ -124,6 +129,10 @@ module.exports.Insert = async (data) => {
     data.orderId = `${data.orderId}_${data.numberOrder}`;
     data.dateCreated = new Date(data.dateCreated);
     data.dateCreated.setHours(data.dateCreated.getHours() + 7);
+    data.dateTimeCreatedOrder = new Date(data.dateTimeCreatedOrder);
+    data.dateTimeCreatedOrder.setHours(
+        data.dateTimeCreatedOrder.getHours() + 7,
+    );
 
     for (let item of listOrderDetail) {
         item.orderId = data.orderId;
@@ -159,7 +168,7 @@ module.exports.Update = async (data) => {
                 address: data.address,
                 phoneNumber: data.phoneNumber,
                 numberOrderId: data.numberOrderId,
-                dateCreated: data.dateCreated,
+                dateCreated: new Date(data.dateCreated),
                 totalPrice: data.totalPrice,
                 receiverId: data.receiver,
                 transpoter: data.transpoter,

@@ -6,10 +6,10 @@ const UserCollection = 'user';
 
 module.exports.User = class User {
     constructor(username, password, staffId, role) {
-        (this.username = username),
-            (this.password = password),
-            (this.staffId = staffId),
-            (this.role = role);
+        this.username = username;
+        this.password = password;
+        this.staffId = staffId;
+        this.role = role;
     }
 };
 

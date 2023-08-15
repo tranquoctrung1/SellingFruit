@@ -5,7 +5,8 @@ const RoleCollection = 'role';
 
 module.exports.Role = class Role {
     constructor(role, name) {
-        (this.role = role), (this.name = name);
+        this.role = role;
+        this.name = name;
     }
 };
 

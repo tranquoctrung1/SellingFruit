@@ -14,13 +14,13 @@ module.exports.Consumer = class Consumer {
         phoneNumber,
         note,
     ) {
-        (this.consumerId = consumerId),
-            (this.consumerName = consumerName),
-            (this.staffId = staffId),
-            (this.staffName = staffName),
-            (this.address = address),
-            (this.phoneNumber = phoneNumber),
-            (this.note = note);
+        this.consumerId = consumerId;
+        this.consumerName = consumerName;
+        this.staffId = staffId;
+        this.staffName = staffName;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.note = note;
     }
 };
 

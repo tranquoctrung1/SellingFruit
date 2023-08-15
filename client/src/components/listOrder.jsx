@@ -1,14 +1,14 @@
 import {
-    ActionIcon,
-    Button,
-    Center,
-    Col,
-    Grid,
-    Kbd,
-    Loader,
-    Space,
-    Text,
-    TextInput,
+	ActionIcon,
+	Button,
+	Center,
+	Col,
+	Grid,
+	Kbd,
+	Loader,
+	Space,
+	Text,
+	TextInput,
 } from '@mantine/core';
 
 import DataTable, { createTheme } from 'react-data-table-component';
@@ -18,10 +18,10 @@ import { useOrder, useUpdatePrintOrder } from '../hooks/orderHooks';
 import jwt_decode from 'jwt-decode';
 
 import {
-    IconEdit,
-    IconPrinterOff,
-    IconRotate360,
-    IconSearch,
+	IconEdit,
+	IconPrinterOff,
+	IconRotate360,
+	IconSearch,
 } from '@tabler/icons';
 
 import { useOrderGlobalState } from '../globalState/currentOrder.state';
@@ -33,6 +33,8 @@ import { useState } from 'react';
 import { NotificationContainer } from 'react-notifications';
 
 import Swal from 'sweetalert2';
+
+import { convertDateToString, formatNumberOrder } from '../utils/util';
 
 const ListOrder = () => {
     const [isFilterData, setIsFilterData] = useState(false);
@@ -76,10 +78,6 @@ const ListOrder = () => {
     let column;
     let dataForTable = [];
 
-    const formatNumberOrder = (number) => {
-        return number.padStart(6, '0');
-    };
-
     const loadOrder = () => {
         if (orders.length > 0) {
             let columns = [
@@ -105,6 +103,13 @@ const ListOrder = () => {
                 {
                     name: 'Tên người tạo (tài khoản)',
                     selector: (row) => row.username,
+                    sortable: true,
+                    wrap: true,
+                },
+                {
+                    name: 'Ngày tạo đơn hàng',
+                    selector: (row) => row.dateCreated,
+                    format: (row) => convertDateToString(row.dateCreated),
                     sortable: true,
                     wrap: true,
                 },
@@ -207,6 +212,27 @@ const ListOrder = () => {
             }
         }
     };
+
+    const conditionalRowStyle = [
+        {
+            when: (row) => row.status === 1,
+            style: {
+                backgroundColor: '#44bd32',
+            },
+        },
+        {
+            when: (row) => row.status === 2,
+            style: {
+                backgroundColor: '#e1b12c',
+            },
+        },
+        {
+            when: (row) => row.status === 0,
+            style: {
+                backgroundColor: '#0097e6',
+            },
+        },
+    ];
 
     loadOrder();
 
@@ -336,6 +362,7 @@ const ListOrder = () => {
                                 paginationRowsPerPageOptions={[
                                     5, 10, 50, 100, 200, 500,
                                 ]}
+                                conditionalRowStyles={conditionalRowStyle}
                             />
                         ) : (
                             <DataTable
@@ -346,6 +373,7 @@ const ListOrder = () => {
                                 paginationRowsPerPageOptions={[
                                     5, 10, 50, 100, 200, 500,
                                 ]}
+                                conditionalRowStyles={conditionalRowStyle}
                             />
                         )
                     ) : localStorage.getItem(
@@ -360,6 +388,7 @@ const ListOrder = () => {
                             paginationRowsPerPageOptions={[
                                 5, 10, 50, 100, 200, 500,
                             ]}
+                            conditionalRowStyles={conditionalRowStyle}
                         />
                     ) : (
                         <DataTable
@@ -370,6 +399,7 @@ const ListOrder = () => {
                             paginationRowsPerPageOptions={[
                                 5, 10, 50, 100, 200, 500,
                             ]}
+                            conditionalRowStyles={conditionalRowStyle}
                         />
                     )}
                 </Col>

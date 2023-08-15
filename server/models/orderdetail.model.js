@@ -5,12 +5,12 @@ const OrderDetailCollection = 'orderdetail';
 
 module.exports.OrderDetail = class OrderDetail {
     constructor(orderId, productId, productName, amount, price, note) {
-        (this.orderId = orderId),
-            (this.productId = productId),
-            (this.productName = productName),
-            (this.amount = amount),
-            (this.price = price),
-            (this.note = note);
+        this.orderId = orderId;
+        this.productId = productId;
+        this.productName = productName;
+        this.amount = amount;
+        this.price = price;
+        this.note = note;
     }
 };
 

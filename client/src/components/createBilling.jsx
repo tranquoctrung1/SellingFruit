@@ -94,6 +94,7 @@ const CreateBilling = () => {
             staffName: '',
             staffId: '',
             allowPrint: 2,
+            dateTimeCreatedOrder: new Date(Date.now()),
         },
     });
 
@@ -299,7 +300,7 @@ const CreateBilling = () => {
                         date.getFullYear(),
                         date.getMonth(),
                         date.getDate(),
-                        7,
+                        0,
                         0,
                         0,
                     );

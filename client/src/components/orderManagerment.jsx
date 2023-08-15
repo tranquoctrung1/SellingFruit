@@ -35,6 +35,8 @@ import Swal from 'sweetalert2';
 
 import { useNavigate } from 'react-router-dom';
 
+import { convertDateToString, formatNumberOrder } from '../utils/util';
+
 const OrderManagerment = () => {
     const [isFilterData, setIsFilterData] = useState(false);
     const [dataFilter, setFilterData] = useState([]);
@@ -79,41 +81,8 @@ const OrderManagerment = () => {
     let column;
     let dataForTable = [];
 
-    const formatNumberOrder = (number) => {
-        return number.padStart(6, '0');
-    };
-
-    const convertDateToString = (time) => {
-        if (
-            time !== null &&
-            time !== undefined &&
-            time.toString().trim() !== ''
-        ) {
-            let date = new Date(time);
-            let year = date.getFullYear();
-            let month =
-                date.getMonth() + 1 >= 10
-                    ? date.getMonth() + 1
-                    : `0${date.getMonth() + 1}`;
-            let day =
-                date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`;
-            let hours =
-                date.getHours() >= 10 ? date.getHours() : `0${date.getHours()}`;
-            let minute =
-                date.getMinutes() >= 10
-                    ? date.getMinutes()
-                    : `0${date.getMinutes()}`;
-            let second =
-                date.getSeconds() >= 10
-                    ? date.getSeconds()
-                    : `0${date.getSeconds()}`;
-
-            return `${day}/${month}/${year} ${hours}:${minute}:${second}`;
-        }
-        return '';
-    };
-
     const loadOrder = () => {
+        console.log(orders);
         if (orders.length > 0) {
             let columns = [
                 {
@@ -144,8 +113,7 @@ const OrderManagerment = () => {
                 {
                     name: 'Ngày tạo đơn hàng',
                     selector: (row) => row.dateCreated,
-                    format: (row) =>
-                        convertDateToString(new Date(row.dateCreated)),
+                    format: (row) => convertDateToString(row.dateCreated),
                     sortable: true,
                     wrap: true,
                 },
@@ -255,6 +223,27 @@ const OrderManagerment = () => {
             }
         }
     };
+
+    const conditionalRowStyle = [
+        {
+            when: (row) => row.status === 1,
+            style: {
+                backgroundColor: '#44bd32',
+            },
+        },
+        {
+            when: (row) => row.status === 2,
+            style: {
+                backgroundColor: '#e1b12c',
+            },
+        },
+        {
+            when: (row) => row.status === 0,
+            style: {
+                backgroundColor: '#0097e6',
+            },
+        },
+    ];
 
     loadOrder();
 
@@ -384,6 +373,7 @@ const OrderManagerment = () => {
                                 paginationRowsPerPageOptions={[
                                     30, 50, 100, 200, 500,
                                 ]}
+                                conditionalRowStyles={conditionalRowStyle}
                             />
                         ) : (
                             <DataTable
@@ -394,6 +384,7 @@ const OrderManagerment = () => {
                                 paginationRowsPerPageOptions={[
                                     30, 50, 100, 200, 500,
                                 ]}
+                                conditionalRowStyles={conditionalRowStyle}
                             />
                         )
                     ) : localStorage.getItem(
@@ -408,6 +399,7 @@ const OrderManagerment = () => {
                             paginationRowsPerPageOptions={[
                                 30, 50, 100, 200, 500,
                             ]}
+                            conditionalRowStyles={conditionalRowStyle}
                         />
                     ) : (
                         <DataTable
@@ -418,6 +410,7 @@ const OrderManagerment = () => {
                             paginationRowsPerPageOptions={[
                                 30, 50, 100, 200, 500,
                             ]}
+                            conditionalRowStyles={conditionalRowStyle}
                         />
                     )}
                 </Col>

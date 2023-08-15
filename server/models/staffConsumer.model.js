@@ -5,7 +5,8 @@ const StaffConsumerCollection = 'staffConsumer';
 
 module.exports.StaffConsumer = class StaffConsumer {
     constructor(staffId, consumerId) {
-        (this.staffId = staffId), (this.consumerId = consumerId);
+        this.staffId = staffId;
+        this.consumerId = consumerId;
     }
 };
 

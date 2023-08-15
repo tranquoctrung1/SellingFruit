@@ -5,10 +5,10 @@ const StaffCollection = 'staff';
 
 module.exports.Staff = class Staff {
     constructor(staffId, fullname, address, phone) {
-        (this.staffId = staffId),
-            (this.fullname = fullname),
-            (this.address = address),
-            (this.phone = phone);
+        this.staffId = staffId;
+        this.fullname = fullname;
+        this.address = address;
+        this.phone = phone;
     }
 };
 

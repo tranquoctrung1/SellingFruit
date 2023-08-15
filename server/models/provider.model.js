@@ -5,12 +5,12 @@ const ProviderCollection = 'provider';
 
 module.exports.Provider = class Provider {
     constructor(providerId, providerName, address, staffId, phoneNumber, note) {
-        (this.providerId = providerId),
-            (this.providerName = providerName),
-            (this.address = address),
-            (this.staffId = staffId),
-            (this.phoneNumber = phoneNumber),
-            (this.note = note);
+        this.providerId = providerId;
+        this.providerName = providerName;
+        this.address = address;
+        this.staffId = staffId;
+        this.phoneNumber = phoneNumber;
+        this.note = note;
     }
 };
 

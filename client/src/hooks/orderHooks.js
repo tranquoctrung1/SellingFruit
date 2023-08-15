@@ -41,7 +41,7 @@ export const useInsertOrder = () => {
         },
         onSuccess: (data, variables, context) => {
             if (DataView.length > 0) {
-                client.setQueryData(['order'], [...context, data[0]]);
+                client.setQueryData(['order'], [data[0], ...context]);
                 client.setQueryData(['currentOrder'], data[0]);
             } else {
                 client.setQueryData(['order'], [...context]);

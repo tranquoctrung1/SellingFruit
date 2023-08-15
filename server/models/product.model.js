@@ -5,11 +5,11 @@ const ProductCollection = 'product';
 
 module.exports.Product = class Product {
     constructor(productId, productName, unit, price, note) {
-        (this.productId = productId),
-            (this.productName = productName),
-            (this.unit = unit),
-            (this.price = price),
-            (this.note = note);
+        this.productId = productId;
+        this.productName = productName;
+        this.unit = unit;
+        this.price = price;
+        this.note = note;
     }
 };
 
