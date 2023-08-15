@@ -29,6 +29,8 @@ import { Navigate } from 'react-router-dom';
 
 import { useState } from 'react';
 
+import { useManageStaff } from '../hooks/manageStaffHooks';
+
 import { NotificationContainer } from 'react-notifications';
 
 import Swal from 'sweetalert2';
@@ -47,12 +49,18 @@ const OrderManagerment = () => {
     );
 
     const { isLoading, data: orders, error, isError } = useOrder();
+    const {
+        isLoading: isLoadingManageStaff,
+        data: manageStaffs,
+        error: errorManageStaff,
+        isError: isErrorManageStaff,
+    } = useManageStaff();
 
     const useUpdatePrintOrderMutation = useUpdatePrintOrder();
 
     const navigate = useNavigate();
 
-    if (isLoading) {
+    if (isLoading || isLoadingManageStaff) {
         return (
             <Grid>
                 <Col span={12}>
@@ -64,13 +72,13 @@ const OrderManagerment = () => {
         );
     }
 
-    if (isError) {
+    if (isError && isErrorManageStaff) {
         return (
             <Grid>
                 <Col span={12}>
                     <Center>
                         <Text size="md" color="red" weight={500}>
-                            {error.message}
+                            {error.message} {errorManageStaff.message}
                         </Text>
                     </Center>
                 </Col>
@@ -82,6 +90,7 @@ const OrderManagerment = () => {
     let dataForTable = [];
 
     const loadOrder = () => {
+        console.log(orders);
         if (orders.length > 0) {
             let columns = [
                 {
@@ -213,10 +222,33 @@ const OrderManagerment = () => {
                 } else {
                     if (decodeToken.role === 'admin') {
                         dataForTable = orders;
-                    } else {
+                    } else if (decodeToken.role === 'staff') {
                         dataForTable = orders.filter(
                             (el) => el.staffId === decodeToken.staffId,
                         );
+                    } else if (decodeToken.role === 'staffManager') {
+                        console.log(manageStaffs);
+                        let find = manageStaffs.find(
+                            (el) =>
+                                el.staffManagerId ===
+                                decodeToken.staffManagerId,
+                        );
+
+                        if (find !== undefined) {
+                            if (find.staffId.length > 0) {
+                                let temp = [];
+
+                                for (let staffId of find.staffId) {
+                                    let filterOrder = orders.filter(
+                                        (el) => el.staffId === staffId,
+                                    );
+
+                                    temp = [...temp, ...filterOrder];
+                                }
+
+                                dataForTable = temp;
+                            }
+                        }
                     }
                 }
             }

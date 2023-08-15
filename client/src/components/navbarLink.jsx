@@ -32,6 +32,20 @@ const NavBarLink = () => {
         }
     };
 
+    const getRoleStaffManager = () => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            return <Navigate to="/login" />;
+        } else {
+            const token = localStorage.getItem('token');
+
+            let decodeToken = jwt_decode(token);
+
+            return decodeToken.role === 'staffManager';
+        }
+    };
+
     const [openSidebar, setOpenSidebar] = useOpenSidebarState(
         'openSidebar',
         false,
@@ -44,39 +58,42 @@ const NavBarLink = () => {
     return (
         <div>
             <Grid align="center">
-                <Col span={12}>
-                    <Button
-                        variant="subtle"
-                        fullWidth={true}
-                        component={Link}
-                        onClick={onChangedPageClicked}
-                        to="/"
-                        leftIcon={
-                            <ThemeIcon color="grape">
-                                <IconFileInfo />
-                            </ThemeIcon>
-                        }
-                        styles={(theme) => ({
-                            root: {
-                                border: 0,
-                                height: 42,
-                                justifyContent: 'flex-start',
-                                alignItems: 'center',
-                            },
-                            inner: {
-                                justifyContent: 'flex-start',
-                            },
-                            leftIcon: {
-                                marginRight: 10,
-                                opacity: 0.5,
-                            },
-                        })}
-                    >
-                        <Text size="sx" weight={500}>
-                            Hóa đơn bán lẻ
-                        </Text>
-                    </Button>
-                </Col>
+                {getRoleStaffManager() === false ? (
+                    <Col span={12}>
+                        <Button
+                            variant="subtle"
+                            fullWidth={true}
+                            component={Link}
+                            onClick={onChangedPageClicked}
+                            to="/"
+                            leftIcon={
+                                <ThemeIcon color="grape">
+                                    <IconFileInfo />
+                                </ThemeIcon>
+                            }
+                            styles={(theme) => ({
+                                root: {
+                                    border: 0,
+                                    height: 42,
+                                    justifyContent: 'flex-start',
+                                    alignItems: 'center',
+                                },
+                                inner: {
+                                    justifyContent: 'flex-start',
+                                },
+                                leftIcon: {
+                                    marginRight: 10,
+                                    opacity: 0.5,
+                                },
+                            })}
+                        >
+                            <Text size="sx" weight={500}>
+                                Hóa đơn bán lẻ
+                            </Text>
+                        </Button>
+                    </Col>
+                ) : null}
+
                 <Col span={12}>
                     <Button
                         variant="subtle"

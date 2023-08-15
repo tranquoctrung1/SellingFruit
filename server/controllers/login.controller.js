@@ -37,6 +37,9 @@ module.exports.Login = async (req, res) => {
                             role: result[0].role,
                             staffId: result[0].staffId,
                             staffName: '',
+                            staffManagerId: result[0].staffManagerId
+                                ? result[0].staffManagerId
+                                : '',
                         },
                         process.env.JWT_KEY,
                         //{ expiresIn: "1h" }

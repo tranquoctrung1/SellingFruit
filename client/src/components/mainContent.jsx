@@ -36,20 +36,37 @@ const MainContent = () => {
         }
     };
 
+    const getRoleStaffManager = () => {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            return <Navigate to="/login" />;
+        } else {
+            const token = localStorage.getItem('token');
+
+            let decodeToken = jwt_decode(token);
+
+            return decodeToken.role === 'staffManager';
+        }
+    };
+
     return (
         <AnimatePresence>
             <Routes location={location} key={location.pathname}>
-                <Route
-                    exact
-                    path="/"
-                    element={
-                        <>
-                            <RoleRouter>
-                                <Billing />
-                            </RoleRouter>
-                        </>
-                    }
-                />
+                {getRoleStaffManager() === false ? (
+                    <Route
+                        exact
+                        path="/"
+                        element={
+                            <>
+                                <RoleRouter>
+                                    <Billing />
+                                </RoleRouter>
+                            </>
+                        }
+                    />
+                ) : null}
+
                 <Route
                     exact
                     path="/ordermanager"

@@ -5,11 +5,12 @@ const bcrypt = require('bcryptjs');
 const UserCollection = 'user';
 
 module.exports.User = class User {
-    constructor(username, password, staffId, role) {
+    constructor(username, password, staffId, role, staffManagerId) {
         this.username = username;
         this.password = password;
         this.staffId = staffId;
         this.role = role;
+        this.staffManagerId = staffManagerId;
     }
 };
 
@@ -84,6 +85,7 @@ module.exports.Update = async (data) => {
                 password: data.password,
                 staffId: data.staffId,
                 role: data.role,
+                staffManagerId: data.staffManagerId,
             },
         },
     );

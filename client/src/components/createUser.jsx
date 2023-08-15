@@ -22,9 +22,11 @@ import { useRole } from '../hooks/roleHooks';
 
 import { useStaff } from '../hooks/staffHooks';
 
+import { useStaffManager } from '../hooks/staffManagerHooks';
+
 import { Controller, useForm } from 'react-hook-form';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import Swal from 'sweetalert2';
 
@@ -35,6 +37,7 @@ const CreateUser = () => {
     const [errorUsername, setErrorUsername] = useState('');
     const [errorPassword, setErrorPassword] = useState('');
     const [isDisabledStaff, setIsDisabledStaff] = useState(false);
+    const [isDisableStaffManager, setIsDisabledStaffManager] = useState(false);
 
     const { control, getValues, reset, setValue, register } = useForm({
         defaultValues: {
@@ -42,6 +45,7 @@ const CreateUser = () => {
             password: '',
             staffId: '',
             role: '',
+            staffManagerId: '',
         },
     });
 
@@ -69,6 +73,13 @@ const CreateUser = () => {
         error: errorStaff,
         isError: isErrorStaff,
     } = useStaff();
+
+    const {
+        isLoading: isLoadingStaffManager,
+        data: staffManagers,
+        error: errorStaffManager,
+        isError: isErrorStaffManager,
+    } = useStaffManager();
 
     const listUsername = [];
 
@@ -104,7 +115,22 @@ const CreateUser = () => {
         }
     };
 
-    if (isLoadingUser || isLoadingRole || isLoadingStaff) {
+    const listStaffManagerId = [];
+    const setListStaffManagerId = () => {
+        for (let staffManager of staffManagers) {
+            let index = listStaffManagerId.indexOf(staffManager.staffManagerId);
+            if (index === -1) {
+                listStaffManagerId.push(staffManager.staffManagerId);
+            }
+        }
+    };
+
+    if (
+        isLoadingUser ||
+        isLoadingRole ||
+        isLoadingStaff ||
+        isLoadingStaffManager
+    ) {
         return (
             <Grid>
                 <Col span={12}>
@@ -116,14 +142,14 @@ const CreateUser = () => {
         );
     }
 
-    if (isErrorUser && isErrorRole && isErrorStaff) {
+    if (isErrorUser && isErrorRole && isErrorStaff && isErrorStaffManager) {
         return (
             <Grid>
                 <Col span={12}>
                     <Center>
                         <Text size="md" color="red" weight={500}>
                             {errorUser.message} {errorRole.message}{' '}
-                            {errorStaff.message}
+                            {errorStaff.message} {errorStaffManager}
                         </Text>
                     </Center>
                 </Col>
@@ -134,6 +160,7 @@ const CreateUser = () => {
     setListRole();
     setListUserName();
     setListStaffId();
+    setListStaffManagerId();
 
     const checkExistsUsername = (username, data) => {
         let findIndex = data.findIndex((el) => el.username === username);
@@ -170,11 +197,17 @@ const CreateUser = () => {
         if (find !== undefined) {
             setValue('role', find.role);
             setValue('staffId', find.staffId);
+            setValue('staffManagerId', find.staffManagerId);
 
             if (find.role === 'admin') {
                 setIsDisabledStaff(true);
+                setIsDisabledStaffManager(true);
             } else if (find.role === 'staff') {
                 setIsDisabledStaff(false);
+                setIsDisabledStaffManager(true);
+            } else if (find.role === 'staffManager') {
+                setIsDisabledStaff(true);
+                setIsDisabledStaffManager(false);
             }
         }
     };
@@ -192,10 +225,16 @@ const CreateUser = () => {
     };
 
     const onRoleChanged = (e) => {
+        console.log(e.target.value);
         if (e.target.value === 'admin') {
             setIsDisabledStaff(true);
+            setIsDisabledStaffManager(true);
         } else if (e.target.value === 'staff') {
             setIsDisabledStaff(false);
+            setIsDisabledStaffManager(true);
+        } else if (e.target.value === 'staffManager') {
+            setIsDisabledStaff(true);
+            setIsDisabledStaffManager(false);
         }
     };
 
@@ -398,6 +437,23 @@ const CreateUser = () => {
                                 nothingFound="Không mã nhân viên"
                                 disabled={isDisabledStaff}
                                 data={listStaffId}
+                                {...field}
+                            />
+                        )}
+                    ></Controller>
+                </Col>
+                <Col sm={12} md={6}>
+                    <Controller
+                        name="staffManagerId"
+                        control={control}
+                        render={({ field }) => (
+                            <Select
+                                label="Mã nhân viên quản lý"
+                                placeholder="Mã nhân viên quản lý"
+                                searchable
+                                nothingFound="Không mã nhân viên quản lý"
+                                disabled={isDisableStaffManager}
+                                data={listStaffManagerId}
                                 {...field}
                             />
                         )}
