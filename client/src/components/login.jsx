@@ -67,8 +67,11 @@ const Login = () => {
                         localStorage.setItem('username', res.data.username);
                         localStorage.setItem('role', res.data.role);
                         localStorage.setItem('token', res.data.token);
-
-                        navigate('/');
+                        if (res.data.role === 'staffManager') {
+                            navigate('/ordermanager');
+                        } else {
+                            navigate('/');
+                        }
                     }
                 })
                 .catch((err) => console.log(err.message));
